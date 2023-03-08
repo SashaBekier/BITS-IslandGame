@@ -212,11 +212,7 @@ while(collapsed < (my_map.rows * my_map.cols)):
     else:
         collapsed_no_change_ticks = 0
     my_map.collapse_tile()
-    if(collapsed_no_change_ticks>10):
-        collapsed=1000000
-    
-##    if(collapsed%25 == 0):
-##        my_map.draw_map()
-##        print("collapsed ",collapsed)
-##        #input()
+    if(collapsed_no_change_ticks>100):
+        my_map = GameMap(25,25)
+        my_map.setup_fixed_tiles()
 my_map.draw_map()
