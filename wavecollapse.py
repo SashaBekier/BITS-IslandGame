@@ -37,7 +37,7 @@ class GameMap():
         self.rows = height
         self.cols = width
         self.tiles = []
-        self.terrains = [Terrain("Ocean","~"),    #0
+        self.terrains = [Terrain("Ocean"," "),    #0
                            Terrain("Coast","c"),    #1
                            Terrain("Grassland","-"),#2
                            Terrain("Swamp","#"),    #3
@@ -45,46 +45,45 @@ class GameMap():
                            Terrain("Hill","m"),     #5
                            Terrain("Slope","^"),    #6
                            Terrain("Caldera","*")]  #7
-        self.terrains[0].constraints.append(Constraint(self.terrains[0],4))
-        self.terrains[0].constraints.append(Constraint(self.terrains[1],13))
+        self.terrains[0].constraints.append(Constraint(self.terrains[0],1))
+        self.terrains[0].constraints.append(Constraint(self.terrains[1],3))
 
         self.terrains[1].constraints.append(Constraint(self.terrains[0],0))
         self.terrains[1].constraints.append(Constraint(self.terrains[1],0))
-        self.terrains[1].constraints.append(Constraint(self.terrains[2],5))
+        self.terrains[1].constraints.append(Constraint(self.terrains[2],6))
         self.terrains[1].constraints.append(Constraint(self.terrains[3],2))
         self.terrains[1].constraints.append(Constraint(self.terrains[4]))
-        self.terrains[1].constraints.append(Constraint(self.terrains[5]))
 
         self.terrains[2].constraints.append(Constraint(self.terrains[1],0))
-        self.terrains[2].constraints.append(Constraint(self.terrains[2],5))
+        self.terrains[2].constraints.append(Constraint(self.terrains[2],6))
         self.terrains[2].constraints.append(Constraint(self.terrains[3]))
         self.terrains[2].constraints.append(Constraint(self.terrains[4]))
         self.terrains[2].constraints.append(Constraint(self.terrains[5]))
 
         self.terrains[3].constraints.append(Constraint(self.terrains[1],0))
         self.terrains[3].constraints.append(Constraint(self.terrains[2]))
-        self.terrains[3].constraints.append(Constraint(self.terrains[3],5))
+        self.terrains[3].constraints.append(Constraint(self.terrains[3],6))
         self.terrains[3].constraints.append(Constraint(self.terrains[4]))
         self.terrains[3].constraints.append(Constraint(self.terrains[5]))
 
         self.terrains[4].constraints.append(Constraint(self.terrains[1],0))
         self.terrains[4].constraints.append(Constraint(self.terrains[2]))
         self.terrains[4].constraints.append(Constraint(self.terrains[3]))
-        self.terrains[4].constraints.append(Constraint(self.terrains[4],5))
+        self.terrains[4].constraints.append(Constraint(self.terrains[4],6))
         self.terrains[4].constraints.append(Constraint(self.terrains[5]))
                 
         self.terrains[5].constraints.append(Constraint(self.terrains[1],0))
-        self.terrains[5].constraints.append(Constraint(self.terrains[2]))
-        self.terrains[5].constraints.append(Constraint(self.terrains[3]))
-        self.terrains[5].constraints.append(Constraint(self.terrains[4]))
-        self.terrains[5].constraints.append(Constraint(self.terrains[5],5))
-        self.terrains[5].constraints.append(Constraint(self.terrains[6]))
+        self.terrains[5].constraints.append(Constraint(self.terrains[2],2))
+        self.terrains[5].constraints.append(Constraint(self.terrains[3],2))
+        self.terrains[5].constraints.append(Constraint(self.terrains[4],2))
+        self.terrains[5].constraints.append(Constraint(self.terrains[5],14))
+        self.terrains[5].constraints.append(Constraint(self.terrains[6],1))
         
-        self.terrains[6].constraints.append(Constraint(self.terrains[5],2))
-        self.terrains[6].constraints.append(Constraint(self.terrains[6],3))
-        self.terrains[6].constraints.append(Constraint(self.terrains[7],0))
+        self.terrains[6].constraints.append(Constraint(self.terrains[5],28))
+        self.terrains[6].constraints.append(Constraint(self.terrains[6],32))
+        self.terrains[6].constraints.append(Constraint(self.terrains[7],1))
 
-        self.terrains[7].constraints.append(Constraint(self.terrains[6],5))
+        self.terrains[7].constraints.append(Constraint(self.terrains[6],9))
         self.terrains[7].constraints.append(Constraint(self.terrains[7]))
 
         row = 0
@@ -104,9 +103,9 @@ class GameMap():
                 print(row_text)
                 row_text = ""
             if(tile.collapsed):
-                row_text += tile.terrain.code
+                row_text += tile.terrain.code+tile.terrain.code
             else:
-                row_text += str(len(tile.superpositions))
+                row_text += str(len(tile.superpositions))+str(len(tile.superpositions))
         row_text += "\n"
         for terrain in self.terrains:
             row_text += terrain.code + ": " + terrain.name + " | "
@@ -126,19 +125,15 @@ class GameMap():
                 tile.terrain = self.terrains[7]
 
     def get_tile_by_coords(self,row,col):
-        index = row*self.cols+col
+        index = (row%self.rows)*self.cols+(col%self.cols)
         return self.tiles[index]
 
     def get_neighbours_of(self,tile):
         output = []
-        if(tile.row!=0):
-            output.append(self.get_tile_by_coords(tile.row-1,tile.col))
-        if(tile.row<self.rows-1):
-            output.append(self.get_tile_by_coords(tile.row+1,tile.col))
-        if(tile.col!=0):
-            output.append(self.get_tile_by_coords(tile.row,tile.col-1))
-        if(tile.col<self.cols-1):
-            output.append(self.get_tile_by_coords(tile.row,tile.col+1))
+        output.append(self.get_tile_by_coords(tile.row-1,tile.col))
+        output.append(self.get_tile_by_coords(tile.row+1,tile.col))
+        output.append(self.get_tile_by_coords(tile.row,tile.col-1))
+        output.append(self.get_tile_by_coords(tile.row,tile.col+1))
         return output
 
     def resolve_constraints(self):
@@ -263,11 +258,11 @@ class GameMap():
                 collapsed = -1
         return success       
 build_count = 0
-while(build_count<10):
+while(build_count<5):
     collapse_complete = False
     counter = 0
     while(not(collapse_complete)):
-        my_map = GameMap(25,25)
+        my_map = GameMap(30,30)
         my_map.setup_fixed_tiles()
         collapse_complete = my_map.collapse_map()
         counter+=1
