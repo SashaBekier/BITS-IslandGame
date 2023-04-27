@@ -53,6 +53,7 @@ public class PlayerMouseMovement : MonoBehaviour
             animator.SetFloat("XInput", ( prevXPosition));
             animator.SetFloat("YInput", (prevYPosition));
         }
+    }
 
     private void MouseClick()
     {
