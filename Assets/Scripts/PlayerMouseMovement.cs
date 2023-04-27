@@ -14,10 +14,16 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private float moveSpeed = 5;
 
+    private Animator animator;
+    private float prevXPosition = 0;
+    private float prevYPosition = 0;
+
 
     private void Awake()
     {
         mouseInput = new MouseInput();
+        animator = GetComponent<Animator>();
+
     }
 
     private void OnEnable()
@@ -34,18 +40,19 @@ public class PlayerMouseMovement : MonoBehaviour
     void Start()
     {
         mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
-        targetLocation = transform.position;
+        targetLocation = transform.position;       
     }
 
     // Update is called once per frame
     void Update()
-    {
+    { 
         if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime);
+                              
+            animator.SetFloat("XInput", ( prevXPosition));
+            animator.SetFloat("YInput", (prevYPosition));
         }
-        
-    }
 
     private void MouseClick()
     {
@@ -56,6 +63,9 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             targetLocation = ground.CellToWorld(gridPosition);
             targetLocation += new Vector3(0f, .4f, 0f);
+            
+            prevXPosition =  targetLocation.x -  mousePosition.x;
+            prevYPosition =  targetLocation.y - mousePosition.y; 
         }
 
     }
