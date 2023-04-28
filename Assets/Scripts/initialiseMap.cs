@@ -16,21 +16,18 @@ public class initialiseMap : MonoBehaviour
     public Tilemap terrainTilemap;
 
     public Tile oceanTile;
-    public Tile groundTile1;
-    public Tile groundTile2;
-    public Tile groundTile3;
+//    public Tile groundTile1;
+//    public Tile groundTile2;
+//    public Tile groundTile3;
     public Tile rockTile;
     public Tile fogTile;
     public Tile collisionTile;
-    public Tile puzzleTile1;
-    public Tile puzzleTile2;
-    public Tile puzzleTile3;
+//    public Tile puzzleTile1;
+//    public Tile puzzleTile2;
+//    public Tile puzzleTile3;
 
-    private static int groundTileVarietyCount = 3;
-    private static int puzzleTileVarietyCount = 3;
-
-    private Tile[] puzzleTiles = new Tile[puzzleTileVarietyCount];
-    private Tile[] groundTiles = new Tile[groundTileVarietyCount];
+    public Tile[] puzzleTiles;
+    public Tile[] groundTiles;
 
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
@@ -44,13 +41,14 @@ public class initialiseMap : MonoBehaviour
         //UnityEngine.Random.InitState(16726);
 
         //initialise tile randomisation arrays
+        /*
         puzzleTiles[0] = puzzleTile1;
         puzzleTiles[1] = puzzleTile2;
         puzzleTiles[2] = puzzleTile3;
         groundTiles[0] = groundTile1;
         groundTiles[1] = groundTile2;
         groundTiles[2] = groundTile3;
-
+*/
 
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
@@ -234,7 +232,7 @@ public class initialiseMap : MonoBehaviour
 
     void setLandTile(Vector3Int tileCoords)
     {
-        terrainTilemap.SetTile(tileCoords, groundTiles[UnityEngine.Random.Range(0, groundTileVarietyCount)]);
+        terrainTilemap.SetTile(tileCoords, groundTiles[UnityEngine.Random.Range(0, groundTiles.Length)]);
     }
 
     void PlaceFixedGroupTiles()

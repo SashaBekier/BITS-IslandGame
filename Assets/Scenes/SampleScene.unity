@@ -403,15 +403,17 @@ MonoBehaviour:
   impassableTilemap: {fileID: 189811098}
   terrainTilemap: {fileID: 1307978642}
   oceanTile: {fileID: 11400000, guid: 4c79dbb3417ef4f40a849d87f0b5e578, type: 2}
-  groundTile1: {fileID: 11400000, guid: a739191635281eb40b67988f9b599a41, type: 2}
-  groundTile2: {fileID: 11400000, guid: b2495d34db9168d4c9f13f26bf112aca, type: 2}
-  groundTile3: {fileID: 11400000, guid: dae8a7633b070d44cb3732f8d478c2ff, type: 2}
   rockTile: {fileID: 11400000, guid: 8822dc11476703e458ae3aa13444e21c, type: 2}
   fogTile: {fileID: 11400000, guid: 4d95b0e7d6d3ea44390bd83cce6649ac, type: 2}
   collisionTile: {fileID: 11400000, guid: bfba3de9f79836c469c814186ed50561, type: 2}
-  puzzleTile1: {fileID: 11400000, guid: 0de8bc170c940cf4a98bc1cf7cb00b22, type: 2}
-  puzzleTile2: {fileID: 11400000, guid: c54fb2f116a26ad4d9b6555ce767b0cd, type: 2}
-  puzzleTile3: {fileID: 11400000, guid: bf09ace0d3c63004389d14d643ab5490, type: 2}
+  puzzleTiles:
+  - {fileID: 11400000, guid: 0de8bc170c940cf4a98bc1cf7cb00b22, type: 2}
+  - {fileID: 11400000, guid: c54fb2f116a26ad4d9b6555ce767b0cd, type: 2}
+  - {fileID: 11400000, guid: bf09ace0d3c63004389d14d643ab5490, type: 2}
+  groundTiles:
+  - {fileID: 11400000, guid: a739191635281eb40b67988f9b599a41, type: 2}
+  - {fileID: 11400000, guid: dae8a7633b070d44cb3732f8d478c2ff, type: 2}
+  - {fileID: 11400000, guid: b2495d34db9168d4c9f13f26bf112aca, type: 2}
 --- !u!4 &959494598
 Transform:
   m_ObjectHideFlags: 0
