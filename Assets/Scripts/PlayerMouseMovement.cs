@@ -14,12 +14,18 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private Vector3 lastGoodPos;
     private float moveSpeed = 5;
+
+    private Animator animator;
+
     public Collider2D playerCollider;
     
+
 
     private void Awake()
     {
         mouseInput = new MouseInput();
+        animator = GetComponent<Animator>();
+
     }
 
     private void OnEnable()
@@ -47,6 +53,7 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
 
         if (!impassable.HasTile(gridPosition))
+
         {
             if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
             {
@@ -58,7 +65,13 @@ public class PlayerMouseMovement : MonoBehaviour
             gridPosition = ground.WorldToCell(transform.position);
             targetLocation = ground.CellToWorld(gridPosition);
         }
-        
+
+        // Face the idle animations to the direction of the mouse.
+        // TODO: Needs to cancel when moving.
+        // TODO: when moving needs the movement animations. 
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        animator.SetFloat("XInput", (mousePos.x - transform.position.x));
+        animator.SetFloat("YInput", (mousePos.y - transform.position.y));
     }
 
     private void MouseClick()
