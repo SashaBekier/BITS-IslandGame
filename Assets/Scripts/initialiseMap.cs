@@ -33,7 +33,7 @@ public class initialiseMap : MonoBehaviour
     private Tile[] groundTiles = new Tile[groundTileVarietyCount];
 
     private int puzzleReference = 0;
-    private int maxOceanWidth = 10;
+    private int maxOceanWidth = 15;
 
 
 
@@ -57,8 +57,29 @@ public class initialiseMap : MonoBehaviour
         PlaceFixedGroupTiles();
         CreateIsland();
 
+        SetOceanTones();
 
 
+    }
+
+    void SetOceanTones()
+    {
+        for (int xcoord = 0; xcoord <= islandSize; xcoord++)
+        {
+            for (int ycoord = 0; ycoord <= islandSize; ycoord++)
+            {
+                Vector3Int tileCoords = new Vector3Int(xcoord, ycoord, 0);
+                
+                if (terrainTilemap.GetTile<Tile>(tileCoords) == oceanTile)
+                {
+                    if (hasNeighbouringLand(tileCoords) == 0)
+                    {
+                        terrainTilemap.SetTileFlags(tileCoords, TileFlags.None);
+                        terrainTilemap.SetColor(tileCoords, new Color(0f, .4155f, 1f, 1f)); 
+                    }
+                }
+            }
+        }
     }
 
     void CreateIsland()
@@ -87,7 +108,7 @@ public class initialiseMap : MonoBehaviour
         {
             if(tile.Value < maxOceanWidth)
             {
-                if(hasNeighbouringOcean(tile.Key))
+                if(hasNeighbouringOcean(tile.Key)>0)
                 {
                     if(UnityEngine.Random.Range(0,maxOceanWidth) > tile.Value)
                     {
@@ -113,10 +134,12 @@ public class initialiseMap : MonoBehaviour
         return distance;
     }
 
-    bool hasNeighbouringOcean(Vector3Int tileCoords)
+    int hasNeighbouringOcean(Vector3Int tileCoords)
     {
         int tileX = tileCoords.x;
         int tileY = tileCoords.y;
+
+        int neighbourCount = 0;
 
         Vector3Int[] neighbours = new Vector3Int[6];
         neighbours[0] = new Vector3Int(tileX+1, tileY, 0);
@@ -136,11 +159,46 @@ public class initialiseMap : MonoBehaviour
         {
             if (terrainTilemap.GetTile<Tile>(neighbour)==oceanTile)
             {
-                return true;
+                neighbourCount++;
             }
         }
 
-        return false;
+        return neighbourCount;
+    }
+
+    int hasNeighbouringLand(Vector3Int tileCoords)
+    {
+        int tileX = tileCoords.x;
+        int tileY = tileCoords.y;
+
+        int neighbourCount = 0;
+
+        Vector3Int[] neighbours = new Vector3Int[6];
+        neighbours[0] = new Vector3Int(tileX + 1, tileY, 0);
+        neighbours[1] = new Vector3Int(tileX - 1, tileY, 0);
+
+
+        if (tileY % 2 == 0)
+        {
+            tileX--;
+        }
+        neighbours[2] = new Vector3Int(tileX + 1, tileY + 1, 0);
+        neighbours[3] = new Vector3Int(tileX, tileY + 1, 0);
+        neighbours[4] = new Vector3Int(tileX + 1, tileY - 1, 0);
+        neighbours[5] = new Vector3Int(tileX, tileY - 1, 0);
+
+        foreach (Vector3Int neighbour in neighbours)
+        {
+            foreach (Tile landTile in groundTiles)
+            {
+                if (terrainTilemap.GetTile<Tile>(neighbour) == landTile)
+                {
+                    neighbourCount++;
+                }
+            }
+        }
+
+        return neighbourCount;
     }
 
     void setOceanTile(Vector3Int tileCoords)
