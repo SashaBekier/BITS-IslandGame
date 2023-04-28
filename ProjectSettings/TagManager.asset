@@ -11,12 +11,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Impassable
+  - Terrain
+  - NPC
+  - Player
+  - Items
   - Fog
-  - 
   - 
   - 
   - 

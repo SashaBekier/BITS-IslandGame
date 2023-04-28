@@ -8,6 +8,7 @@ using static UnityEngine.Random;
 
 public class initialiseMap : MonoBehaviour
 {
+    public int islandSize = 50;
     public Tilemap fogTilemap;
     public Tilemap impassableTilemap;
     public Tilemap terrainTilemap;
@@ -23,10 +24,15 @@ public class initialiseMap : MonoBehaviour
     public Tile puzzleTile2;
     public Tile puzzleTile3;
 
-    private Tile[] puzzleTiles = new Tile[3];
-    private Tile[] groundTiles = new Tile[3];
+    private static int groundTileVarietyCount = 3;
+    private static int puzzleTileVarietyCount = 3;
+
+    private Tile[] puzzleTiles = new Tile[puzzleTileVarietyCount];
+    private Tile[] groundTiles = new Tile[groundTileVarietyCount];
 
     private int puzzleReference = 0;
+    private int maxOceanWidth = 10;
+    private float oceanSpawnChance = .6f;
 
 
 
@@ -35,7 +41,8 @@ public class initialiseMap : MonoBehaviour
     void Start()
     {
         //UnityEngine.Random.InitState(16726);
-        //terrainTilemap.SetTile(new Vector3Int(0, 0, 0), groundTile);
+        
+        //initialise tile randomisation arrays
         puzzleTiles[0] = puzzleTile1;
         puzzleTiles[1] = puzzleTile2;
         puzzleTiles[2] = puzzleTile3;
@@ -55,27 +62,56 @@ public class initialiseMap : MonoBehaviour
 
     void CreateIsland()
     {
-        for(int xcoord = 0; xcoord < 50; xcoord++)
+        for(int xcoord = 0; xcoord <= islandSize; xcoord++)
         {
-            for (int ycoord = 0; ycoord < 50; ycoord++)
+            for (int ycoord = 0; ycoord <= islandSize; ycoord++)
             {
                 Vector3Int thisTile = new Vector3Int(xcoord, ycoord, 0);
                 fogTilemap.SetTile(thisTile, fogTile);
-                if (xcoord == 0 || ycoord == 0 || xcoord == 50 || ycoord == 50)
+                if (xcoord == 0 || ycoord == 0 || xcoord == islandSize || ycoord == islandSize)
                 {
-                    terrainTilemap.SetTile(thisTile, oceanTile);
-                    impassableTilemap.SetTile(thisTile, collisionTile);
+                    setOceanTile(thisTile);
                 } else
                 {
                     if (!terrainTilemap.HasTile(thisTile))
                     {
-                        terrainTilemap.SetTile(thisTile, groundTiles[UnityEngine.Random.Range(0,3)]);
+                        if (xcoord < maxOceanWidth || ycoord < maxOceanWidth || xcoord > islandSize - maxOceanWidth || ycoord > islandSize-maxOceanWidth)
+                        {
+                            if (hasNeighbouringOcean(thisTile) && UnityEngine.Random.Range(0f, 1f) > oceanSpawnChance)
+                            {
+                                setOceanTile(thisTile);
+                            }
+                        }
+                        if (!terrainTilemap.HasTile(thisTile))
+                        {
+                            setLandTile(thisTile);
+                        }
+
+
+
+
                     }
                 }
             }
         }
     }
 
+    bool hasNeighbouringOcean(Vector3Int tileCoords)
+    {
+        //Vector3Int
+        return true;
+    }
+
+    void setOceanTile(Vector3Int tileCoords)
+    {
+        terrainTilemap.SetTile(tileCoords, oceanTile);
+        impassableTilemap.SetTile(tileCoords, collisionTile);
+    }
+
+    void setLandTile(Vector3Int tileCoords)
+    {
+        terrainTilemap.SetTile(tileCoords, groundTiles[UnityEngine.Random.Range(0, groundTileVarietyCount)]);
+    }
 
     void PlaceFixedGroupTiles()
     {

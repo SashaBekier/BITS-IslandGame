@@ -134,8 +134,7 @@ GameObject:
   - component: {fileID: 189811096}
   - component: {fileID: 189811098}
   - component: {fileID: 189811097}
-  - component: {fileID: 189811099}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Impassable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,31 +242,31 @@ Tilemap:
     m_Data:
       e00: 0
       e01: 0
-      e02: -1.6643015e+10
-      e03: -1.6643015e+10
+      e02: 7.1481204e+19
+      e03: 7.1481204e+19
       e10: 0
       e11: 0
-      e12: 8.62e-43
-      e13: 8.62e-43
-      e20: -6.302006e+32
+      e12: 7.58e-43
+      e13: 7.58e-43
+      e20: -9.466279e+24
       e21: 1e-45
-      e22: 4.955603e-29
-      e23: 4.659322e-10
+      e22: -5.1779893e-19
+      e23: -3.8261105e+19
       e30: 4.5905e-41
       e31: 0
-      e32: 8.63e-43
-      e33: 8.66e-43
+      e32: 7.58e-43
+      e33: 7.61e-43
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: 3.3541e-41, g: 3.3541e-41, b: 3.3541e-41, a: 3.3541e-41}
   - m_RefCount: 0
-    m_Data: {r: 3.3536e-41, g: 3.3536e-41, b: 3.3536e-41, a: 3.3536e-41}
+    m_Data: {r: 3.4584e-41, g: 3.4584e-41, b: 3.4584e-41, a: 3.4584e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -9, y: -5, z: 0}
-  m_Size: {x: 17, y: 12, z: 1}
-  m_TileAnchor: {x: 0, y: 0.42, z: 0}
+  m_Size: {x: 33, y: 57, z: 1}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -286,22 +285,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!19719996 &189811099
-TilemapCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189811095}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +296,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -397,7 +380,7 @@ GameObject:
   - component: {fileID: 959494598}
   - component: {fileID: 959494597}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: WorldBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -415,6 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae0236607d2bb84ca345f580a622e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  islandSize: 50
   fogTilemap: {fileID: 1179399956}
   impassableTilemap: {fileID: 189811098}
   terrainTilemap: {fileID: 1307978642}
@@ -457,8 +441,7 @@ GameObject:
   - component: {fileID: 1066576952}
   - component: {fileID: 1066576954}
   - component: {fileID: 1066576955}
-  - component: {fileID: 1066576956}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: warrior1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,7 +499,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!4 &1066576950
 Transform:
   m_ObjectHideFlags: 0
@@ -524,8 +507,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1066576948}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: 24.6, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 25.003, y: 24.794, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -567,18 +550,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0077661276, y: -0.36500973}
+  m_Offset: {x: 0.05287838, y: 0.105350494}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.28, y: 1.28}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.75, y: 0.95703125}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.1146574, y: 0.052528083}
+  m_Size: {x: 0.21169472, y: 0.20507431}
   m_EdgeRadius: 0
 --- !u!114 &1066576954
 MonoBehaviour:
@@ -594,6 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1307978642}
   impassable: {fileID: 189811098}
+  playerCollider: {fileID: 1066576953}
 --- !u!114 &1066576955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,7 +623,7 @@ GameObject:
   - component: {fileID: 1179399954}
   - component: {fileID: 1179399956}
   - component: {fileID: 1179399955}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Fog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1243,7 +1227,7 @@ GameObject:
   - component: {fileID: 1307978640}
   - component: {fileID: 1307978642}
   - component: {fileID: 1307978641}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
