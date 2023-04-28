@@ -57,9 +57,34 @@ public class initialiseMap : MonoBehaviour
         PlaceFixedGroupTiles();
         CreateIsland();
 
+        FixSingleTileIslands();
         SetOceanTones();
 
 
+
+    }
+
+    void FixSingleTileIslands()
+    {
+        for (int xcoord = 0; xcoord <= islandSize; xcoord++)
+        {
+            for (int ycoord = 0; ycoord <= islandSize; ycoord++)
+            {
+                Vector3Int tileCoords = new Vector3Int(xcoord, ycoord, 0);
+                foreach (Tile landTile in groundTiles)
+                {
+                    if (terrainTilemap.GetTile<Tile>(tileCoords) == landTile)
+                    {
+                        if (hasNeighbouringLand(tileCoords) == 0)
+                        {
+                            setOceanTile(tileCoords);
+                        }
+                    }
+                }
+                
+                           
+            }
+        }
     }
 
     void SetOceanTones()
