@@ -16,6 +16,7 @@ public class PlayerMouseMovement : MonoBehaviour
     private float moveSpeed = 5;
 
     private Animator animator;
+    private Vector3 shim = new Vector3(0f, .4f, 0f);
 
     public Collider2D playerCollider;
     
@@ -49,7 +50,7 @@ public class PlayerMouseMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 plannedMove = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime);
+        Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
 
         if (!impassable.HasTile(gridPosition))
@@ -57,13 +58,13 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
             {
-                transform.position = plannedMove;
+                transform.position = plannedMove + shim;
             }
             
         } else
         {
-            gridPosition = ground.WorldToCell(transform.position);
-            targetLocation = ground.CellToWorld(gridPosition);
+            gridPosition = ground.WorldToCell(transform.position - shim);
+            targetLocation = ground.CellToWorld(gridPosition) + shim;
         }
 
         // Face the idle animations to the direction of the mouse.
@@ -82,8 +83,8 @@ public class PlayerMouseMovement : MonoBehaviour
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
             
-            targetLocation = ground.CellToWorld(gridPosition);
-            //targetLocation += new Vector3(0f, .4f, 0f);
+            targetLocation = ground.CellToWorld(gridPosition) + shim;
+            
         }
 
     }

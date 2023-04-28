@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.Random;
@@ -32,7 +34,6 @@ public class initialiseMap : MonoBehaviour
 
     private int puzzleReference = 0;
     private int maxOceanWidth = 10;
-    private float oceanSpawnChance = .6f;
 
 
 
@@ -41,7 +42,7 @@ public class initialiseMap : MonoBehaviour
     void Start()
     {
         //UnityEngine.Random.InitState(16726);
-        
+
         //initialise tile randomisation arrays
         puzzleTiles[0] = puzzleTile1;
         puzzleTiles[1] = puzzleTile2;
@@ -62,44 +63,84 @@ public class initialiseMap : MonoBehaviour
 
     void CreateIsland()
     {
-        for(int xcoord = 0; xcoord <= islandSize; xcoord++)
+        Dictionary<Vector3Int, int> tiles = new Dictionary<Vector3Int, int>();
+        for (int xcoord = 0; xcoord <= islandSize; xcoord++)
         {
             for (int ycoord = 0; ycoord <= islandSize; ycoord++)
             {
-                Vector3Int thisTile = new Vector3Int(xcoord, ycoord, 0);
-                fogTilemap.SetTile(thisTile, fogTile);
+                Vector3Int tileCoords = new Vector3Int(xcoord, ycoord, 0);
+                fogTilemap.SetTile(tileCoords, fogTile);
+                int distance = distanceFromEdge(tileCoords);
+                
+
                 if (xcoord == 0 || ycoord == 0 || xcoord == islandSize || ycoord == islandSize)
                 {
-                    setOceanTile(thisTile);
+                    setOceanTile(tileCoords);
                 } else
                 {
-                    if (!terrainTilemap.HasTile(thisTile))
+                    tiles.Add(tileCoords, distance);    
+                }
+                
+            }
+        }
+        foreach(KeyValuePair<Vector3Int, int> tile in tiles.OrderBy(key => key.Value))
+        {
+            if(tile.Value < maxOceanWidth)
+            {
+                if(hasNeighbouringOcean(tile.Key))
+                {
+                    if(UnityEngine.Random.Range(0,maxOceanWidth) > tile.Value)
                     {
-                        if (xcoord < maxOceanWidth || ycoord < maxOceanWidth || xcoord > islandSize - maxOceanWidth || ycoord > islandSize-maxOceanWidth)
-                        {
-                            if (hasNeighbouringOcean(thisTile) && UnityEngine.Random.Range(0f, 1f) > oceanSpawnChance)
-                            {
-                                setOceanTile(thisTile);
-                            }
-                        }
-                        if (!terrainTilemap.HasTile(thisTile))
-                        {
-                            setLandTile(thisTile);
-                        }
-
-
-
-
+                        setOceanTile(tile.Key);
                     }
                 }
+            }
+            if (!terrainTilemap.HasTile(tile.Key))
+            {
+                setLandTile(tile.Key);
             }
         }
     }
 
+    int distanceFromEdge(Vector3Int coords)
+    {
+        int distance = 100;
+        if(coords.x < distance) distance = coords.x;
+        if(coords.y < distance) distance = coords.y;
+        if (islandSize - coords.x < distance) distance = islandSize - coords.x;
+        if (islandSize - coords.y < distance) distance = islandSize - coords.y;
+        //UnityEngine.Debug.Log(distance.ToString());
+        return distance;
+    }
+
     bool hasNeighbouringOcean(Vector3Int tileCoords)
     {
-        //Vector3Int
-        return true;
+        int tileX = tileCoords.x;
+        int tileY = tileCoords.y;
+
+        Vector3Int[] neighbours = new Vector3Int[6];
+        neighbours[0] = new Vector3Int(tileX+1, tileY, 0);
+        neighbours[1] = new Vector3Int(tileX-1, tileY, 0);
+
+
+        if (tileY % 2 == 0)
+        {
+            tileX--;
+        }
+        neighbours[2] = new Vector3Int(tileX + 1, tileY + 1, 0);
+        neighbours[3] = new Vector3Int(tileX, tileY + 1, 0);
+        neighbours[4] = new Vector3Int(tileX + 1, tileY - 1, 0);
+        neighbours[5] = new Vector3Int(tileX, tileY - 1, 0);
+
+        foreach(Vector3Int neighbour in neighbours)
+        {
+            if (terrainTilemap.GetTile<Tile>(neighbour)==oceanTile)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void setOceanTile(Vector3Int tileCoords)
@@ -115,8 +156,8 @@ public class initialiseMap : MonoBehaviour
 
     void PlaceFixedGroupTiles()
     {
-        int xOffset = UnityEngine.Random.Range(10, 39);
-        int yOffset = UnityEngine.Random.Range(10, 39);
+        int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize-maxOceanWidth);
+        int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
 
 
         if (yOffset % 2 != 0)
