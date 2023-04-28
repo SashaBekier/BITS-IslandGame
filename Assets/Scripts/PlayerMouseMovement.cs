@@ -12,8 +12,10 @@ public class PlayerMouseMovement : MonoBehaviour
     public Tilemap ground;
     public Tilemap impassable;
     private Vector3 targetLocation;
+    private Vector3 lastGoodPos;
     private float moveSpeed = 5;
-
+    public Collider2D playerCollider;
+    
 
     private void Awake()
     {
@@ -35,14 +37,26 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
         targetLocation = transform.position;
+        lastGoodPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
+        Vector3 plannedMove = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime);
+        Vector3Int gridPosition = ground.WorldToCell(plannedMove);
+
+        if (!impassable.HasTile(gridPosition))
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime);
+            if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
+            {
+                transform.position = plannedMove;
+            }
+            
+        } else
+        {
+            gridPosition = ground.WorldToCell(transform.position);
+            targetLocation = ground.CellToWorld(gridPosition);
         }
         
     }
@@ -54,9 +68,14 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
+            
             targetLocation = ground.CellToWorld(gridPosition);
-            targetLocation += new Vector3(0f, .4f, 0f);
+            //targetLocation += new Vector3(0f, .4f, 0f);
         }
 
     }
+
+
+
+
 }
