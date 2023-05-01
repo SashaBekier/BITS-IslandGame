@@ -12,15 +12,14 @@ public class PlayerMouseMovement : MonoBehaviour
     public Tilemap ground;
     public Tilemap impassable;
     private Vector3 targetLocation;
-    private Vector3 lastGoodPos;
+    private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
 
     public Collider2D playerCollider;
-    
-
+   
 
     private void Awake()
     {
@@ -44,7 +43,6 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
         targetLocation = transform.position;
-        lastGoodPos = transform.position;
     }
 
     // Update is called once per frame
@@ -66,10 +64,18 @@ public class PlayerMouseMovement : MonoBehaviour
                 animator.SetFloat("XInput", (mousePos.x - transform.position.x));
                 animator.SetFloat("YInput", (mousePos.y - transform.position.y));
             } else {
+                if (checkpoints.Count > 0)
+                {
+                    targetLocation = checkpoints.Dequeue();
+                }
+                else
+                {
+                    animator.SetBool("isWalking", false);
+                    animator.SetFloat("XInput", (mousePos.x - transform.position.x));
+                    animator.SetFloat("YInput", (mousePos.y - transform.position.y));
 
-                animator.SetBool("isWalking", false);      
-                animator.SetFloat("XInput", (mousePos.x - transform.position.x));
-                animator.SetFloat("YInput", (mousePos.y - transform.position.y));
+                }
+
             }
             
         } else
@@ -87,7 +93,7 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
-            targetLocation = ground.CellToWorld(gridPosition) + shim;            
+            checkpoints.Enqueue(ground.CellToWorld(gridPosition) + shim);            
         }
 
     }
