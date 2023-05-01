@@ -13,7 +13,7 @@ public class PlayerMouseMovement : MonoBehaviour
     public Tilemap impassable;
     private Vector3 targetLocation;
     private Vector3 lastGoodPos;
-    private float moveSpeed = 5;
+    private float moveSpeed = 2.5f;
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -52,6 +52,7 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         if (!impassable.HasTile(gridPosition))
 
@@ -59,6 +60,16 @@ public class PlayerMouseMovement : MonoBehaviour
             if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
             {
                 transform.position = plannedMove + shim;
+
+                //TODO: walking animation to use pathing position, not 'mousePos'.
+                animator.SetBool("isWalking", true);
+                animator.SetFloat("XInput", (mousePos.x - transform.position.x));
+                animator.SetFloat("YInput", (mousePos.y - transform.position.y));
+            } else {
+
+                animator.SetBool("isWalking", false);      
+                animator.SetFloat("XInput", (mousePos.x - transform.position.x));
+                animator.SetFloat("YInput", (mousePos.y - transform.position.y));
             }
             
         } else
@@ -66,13 +77,7 @@ public class PlayerMouseMovement : MonoBehaviour
             gridPosition = ground.WorldToCell(transform.position - shim);
             targetLocation = ground.CellToWorld(gridPosition) + shim;
         }
-
-        // Face the idle animations to the direction of the mouse.
-        // TODO: Needs to cancel when moving.
-        // TODO: when moving needs the movement animations. 
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        animator.SetFloat("XInput", (mousePos.x - transform.position.x));
-        animator.SetFloat("YInput", (mousePos.y - transform.position.y));
+        
     }
 
     private void MouseClick()
@@ -82,14 +87,8 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
-            
-            targetLocation = ground.CellToWorld(gridPosition) + shim;
-            
+            targetLocation = ground.CellToWorld(gridPosition) + shim;            
         }
 
     }
-
-
-
-
 }
