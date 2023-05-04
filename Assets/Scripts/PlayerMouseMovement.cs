@@ -19,6 +19,7 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 shim = new Vector3(0f, .4f, 0f);
 
     public Collider2D playerCollider;
+    //TODO: new character stats.
    
 
     private void Awake()
