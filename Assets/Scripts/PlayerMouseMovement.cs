@@ -5,7 +5,8 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
-
+using System.Data;
+using System.Linq;
 
 public class PlayerMouseMovement : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
+    
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -44,6 +46,8 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
         targetLocation = transform.position;
+
+        
     }
 
     // Update is called once per frame
@@ -102,4 +106,6 @@ public class PlayerMouseMovement : MonoBehaviour
         }
 
     }
+
+    
 }
