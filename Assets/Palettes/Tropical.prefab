@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7856687378872139153}
   - component: {fileID: 2789361177500018116}
   m_Layer: 0
-  m_Name: Hex
+  m_Name: Tropical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
