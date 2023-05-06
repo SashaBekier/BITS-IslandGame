@@ -102,7 +102,12 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
-            checkpoints.Enqueue(ground.CellToWorld(gridPosition) + shim);            
+            Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
+            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
+            while (pathFound.Count > 0)
+            {
+                checkpoints.Enqueue(ground.CellToWorld(pathFound.Dequeue()) + shim);
+            }
         }
 
     }
