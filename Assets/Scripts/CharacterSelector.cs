@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelector : MonoBehaviour
 {
@@ -10,22 +11,27 @@ public class CharacterSelector : MonoBehaviour
     //Review: Player Position may already be in other location
     public Vector3 playerSpawnPosition = new Vector3 (0, 1, -7);
 
-    public Character[] characters;
+    public GameObject[] characters;
 
     public GameObject characterSelectPanel;
+
+
+    //TODO: use this for adding player stats.
     public GameObject playerSpecificStats;
 
+
+
+    // After Character Select
     public void StartGame(int characterChoice)
     {
         characterSelectPanel.SetActive(false);
-        //TODO activev stats panel.
-        playerSpecificStats.SetActive(true);
-        GameObject spawnedPlayer = Instantiate(player, playerSpawnPosition, Quaternion.identity) as GameObject;
+        //TODO atctivate stats panel? or not?
+        //playerSpecificStats.SetActive(true);
 
-        //Index 0 will be the first Character e.g. Warrior
-        Character selectedCharacter = characters[characterChoice]; 
+        GameObject spawnedPlayer = Instantiate(characters[characterChoice], playerSpawnPosition, Quaternion.identity) as GameObject;
 
-
+       
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
