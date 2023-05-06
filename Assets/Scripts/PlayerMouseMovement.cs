@@ -104,6 +104,8 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
+            checkpoints.Clear();
+            
             while (pathFound.Count > 0)
             {
                 checkpoints.Enqueue(ground.CellToWorld(pathFound.Dequeue()) + shim);
