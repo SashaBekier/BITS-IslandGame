@@ -22,7 +22,6 @@ public class PathFinder : MonoBehaviour
     public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords)
     {
         Queue<Vector3Int> path = new Queue<Vector3Int>();
-        path.Enqueue(startCoords);
         
         Dictionary<Vector3Int, int> outboundStepCount = GenerateStepCount(startCoords);
         if (outboundStepCount.ContainsKey(endCoords)) 
