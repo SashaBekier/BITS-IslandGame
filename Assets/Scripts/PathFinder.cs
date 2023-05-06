@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Data;
+
 
 using UnityEngine.Tilemaps;
-using System.Runtime.CompilerServices;
+
 
 public class PathFinder : MonoBehaviour
 {
@@ -17,141 +17,79 @@ public class PathFinder : MonoBehaviour
     {
         instance = this;
     }
-    private int CellToCellDistance(Vector3Int startCoords, Vector3Int endCoords)
-    {
-        int answer = 10000;
-        int yDistance = Mathf.Abs(startCoords.y - endCoords.y);
-        int freeXMin = startCoords.x - (yDistance / 2);
-        if(startCoords.y % 2 == 0 && yDistance%2 == 1 )
-        {
-            freeXMin--;
-        }
-        int freeXMax = freeXMin + yDistance;
-        if(endCoords.x >= freeXMin && endCoords.x <= freeXMax) {
-            answer = yDistance;
-        } else if (endCoords.x < freeXMin)
-        {
-            answer = freeXMin - endCoords.x + yDistance;
-        } else
-        {
-            answer = endCoords.x - freeXMax + yDistance;
-        }
-        return answer;
-        /* int dx = endCoords.x - startCoords.x;     // signed deltas
-         int dy = endCoords.y - startCoords.y;
-         int x = Mathf.Abs(dx);  // absolute deltas
-         int y = Mathf.Abs(dy);
-         // special case if we start on an odd row or if we move into negative x direction
-         if ((dx < 0) || ((startCoords.y % 2) == 1))
-             x = Mathf.Max(0, x - (y + 1) / 2);
-         else
-             x = Mathf.Max(0, x - (y) / 2);
-         return x + y;*/
-        //return 0;
-    }
+   
 
     public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords)
     {
         Queue<Vector3Int> path = new Queue<Vector3Int>();
         path.Enqueue(startCoords);
+        
+        Dictionary<Vector3Int, int> outboundStepCount = GenerateStepCount(startCoords);
+        if (outboundStepCount.ContainsKey(endCoords)) 
+        {
+            Dictionary<Vector3Int, int> inboundStepCount = GenerateStepCount(endCoords);
+            Dictionary<Vector3Int, int> combinedStepCount = new Dictionary<Vector3Int, int>();
+            int lowestCombined = 10000;
+            for (int i = 0; i < initData.islandSize; i++)
+            {
+                for (int j = 0; j < initData.islandSize; j++)
+                {
+                    Vector3Int coords = new Vector3Int(i, j, 0);
 
-        if (impassable.HasTile(endCoords))
-        {
-            return path;
-        }
-        Dictionary<Vector3Int, int> outboundTiles = getDistanceMappedTiles(startCoords);
-        Dictionary<Vector3Int, int> inboundTiles = getDistanceMappedTiles(endCoords);
-        Dictionary<Vector3Int, int> outboundSteps = new Dictionary<Vector3Int, int>();
-        Dictionary<Vector3Int, int> inboundSteps = new Dictionary<Vector3Int, int>();
-        Dictionary<Vector3Int, int> combinedSteps = new Dictionary<Vector3Int, int>();
-        GenerateStepCount(outboundTiles, outboundSteps);
-        GenerateStepCount(inboundTiles, inboundSteps);
-        int lowestPath = 10000;
-        for (int i = 0; i < initData.islandSize; i++)
-        {
-            for (int j = 0; j < initData.islandSize; j++)
-            {
-                
-                Vector3Int setTileCoords = new Vector3Int(i, j, 0);
-                combinedSteps[setTileCoords] = outboundSteps[setTileCoords] + inboundSteps[setTileCoords];
-                if (combinedSteps[setTileCoords] <= lowestPath)
-                {
-                    lowestPath = combinedSteps[setTileCoords];
-                    
+                    if (inboundStepCount.ContainsKey(coords) && outboundStepCount.ContainsKey(coords))
+                    {
+                        combinedStepCount.Add(coords, outboundStepCount[coords] + inboundStepCount[coords]);
+                        if (combinedStepCount[coords] < lowestCombined)
+                        {
+                            lowestCombined = combinedStepCount[coords];
+                        }
+                    }
                 }
             }
-        }
-        
-        Vector3Int currentCoords = startCoords;
-        Vector3Int lastCoords = startCoords;
-        int stepsToGo = inboundSteps[startCoords];
-        int steps = 0;
-        Debug.Log("Start " + startCoords.x + ", " + startCoords.y);
-        Debug.Log("End " + endCoords.x + ", " + endCoords.y);
-        while (!currentCoords.Equals(endCoords) && steps < 10)
-        {
-            steps++;
-            
-            List<Vector3Int> neighbours = getNeighbourCoords(currentCoords);
-            for(int i = 0;i < neighbours.Count; i++)
+            int steps = inboundStepCount[startCoords] - 1;
+            while(steps > 0)
             {
-                if (combinedSteps[neighbours[i]] == lowestPath && inboundSteps[neighbours[i]] < stepsToGo)
+                foreach(KeyValuePair<Vector3Int,int> pair in combinedStepCount)
                 {
-                    path.Enqueue(neighbours[i]);
-                    stepsToGo--;
-                    Debug.Log("Enqueuing " + neighbours[i].x + ", " + neighbours[i].y);
-                    
-                    currentCoords = neighbours[i];
-                    i = 8;
+                    if(pair.Value == lowestCombined && inboundStepCount[pair.Key] == steps) {
+                        path.Enqueue(pair.Key);
+                        break;
+                    }
                 }
+                steps--;
             }
-        }
-        
+            path.Enqueue(endCoords);
+        } 
+
         return path;
     }
-
-    private void GenerateStepCount(Dictionary<Vector3Int, int> distanceMappedTiles, Dictionary<Vector3Int, int> stepCount)
+    private Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
     {
-        foreach (KeyValuePair<Vector3Int, int> tile in distanceMappedTiles.OrderBy(key => key.Value))
-        {
-            if (impassable.HasTile(tile.Key))
-            {
-                stepCount.Add(tile.Key, 10000);
-            }
-            else
-            {
-                if (tile.Value == 0)
-                {
-                    stepCount.Add(tile.Key, tile.Value);
-                }
-                else
-                {
-                    stepCount.Add(tile.Key, getLowestNeighbourValue(tile.Key, stepCount) + 1);
-                }
-            }
-            if (stepCount[tile.Key] <= 1)
-            {
-                Debug.Log("For " + tile.Key.x + "," + tile.Key.y + " step count recorded " + stepCount[tile.Key]);
-            }
-        }
-    }
+        Queue<Vector3Int> checkNeighboursOf = new Queue<Vector3Int>();
+        Dictionary<Vector3Int, int> answer = new Dictionary<Vector3Int, int>();
 
-    private int getLowestNeighbourValue(Vector3Int coords, Dictionary<Vector3Int, int> stepCount)
-    {
-        int answer = 10000;
-        List<Vector3Int> neighbours = getNeighbourCoords(coords);
-        foreach (Vector3Int neighbour in neighbours)
+        
+        answer.Add(coords, 0);
+        
+        checkNeighboursOf.Enqueue(coords);
+        while(checkNeighboursOf.Count > 0 )
         {
-            if (stepCount.ContainsKey(neighbour))
+            Vector3Int checkNeighbour = checkNeighboursOf.Dequeue();
+            List<Vector3Int> newNeighbours = getNeighbourCoords(checkNeighbour);
+            foreach(Vector3Int neighbour in newNeighbours)
             {
-                if(answer > stepCount[neighbour])
-                {
-                    answer = stepCount[neighbour];
+                
+                if(!impassable.HasTile(neighbour) && !answer.ContainsKey(neighbour)) {
+                    answer.Add(neighbour, answer[checkNeighbour] +1);
+                    checkNeighboursOf.Enqueue(neighbour);
                 }
+
             }
+            
         }
         return answer;
     }
+
 
     private List<Vector3Int> getNeighbourCoords(Vector3Int coords)
     {
@@ -188,18 +126,5 @@ public class PathFinder : MonoBehaviour
 
     }
 
-    private Dictionary<Vector3Int, int> getDistanceMappedTiles(Vector3Int referenceTile)
-    {
-        Dictionary<Vector3Int, int> tiles = new Dictionary<Vector3Int, int>();
-        for (int xcoord = 0; xcoord <= initData.islandSize; xcoord++)
-        {
-            for (int ycoord = 0; ycoord <= initData.islandSize; ycoord++)
-            {
-                Vector3Int tileCoords = new Vector3Int(xcoord, ycoord, 0);
-                int distance = CellToCellDistance(tileCoords, referenceTile);
-                tiles.Add(tileCoords, distance);
-            }
-        }
-        return tiles;
-    }
+ 
 }
