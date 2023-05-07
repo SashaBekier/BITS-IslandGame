@@ -1946,6 +1946,7 @@ GameObject:
   - component: {fileID: 1066576954}
   - component: {fileID: 1066576955}
   - component: {fileID: 1066576956}
+  - component: {fileID: 1066576957}
   m_Layer: 9
   m_Name: Warrior
   m_TagString: Player
@@ -2117,6 +2118,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1066576957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066576948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52afe2f80337b324ea04c04824e51c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Strength: 5
+  Intelligence: 5
+  Dexterity: 5
 --- !u!114 &1109048101 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -74523829415549177, guid: 14eb716ea9785b443a7de1a72fca1784, type: 3}
