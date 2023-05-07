@@ -22,6 +22,7 @@ public class PathFinder : MonoBehaviour
     public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords)
     {
         Queue<Vector3Int> path = new Queue<Vector3Int>();
+        Vector3Int lastEnqueued = startCoords;
         
         Dictionary<Vector3Int, int> outboundStepCount = GenerateStepCount(startCoords);
         if (outboundStepCount.ContainsKey(endCoords)) 
@@ -50,8 +51,11 @@ public class PathFinder : MonoBehaviour
             {
                 foreach(KeyValuePair<Vector3Int,int> pair in combinedStepCount)
                 {
-                    if(pair.Value == lowestCombined && inboundStepCount[pair.Key] == steps) {
+                    bool neighbourCheck = isNeighbourOf(lastEnqueued, pair.Key);
+                    if(pair.Value == lowestCombined && inboundStepCount[pair.Key] == steps && neighbourCheck) {
+                        
                         path.Enqueue(pair.Key);
+                        lastEnqueued = pair.Key;
                         break;
                     }
                 }
@@ -61,6 +65,20 @@ public class PathFinder : MonoBehaviour
         } 
 
         return path;
+    }
+
+    private bool isNeighbourOf(Vector3Int fromCoords, Vector3Int toCoords)
+    {
+        bool answer = false;
+        List<Vector3Int> neighbours = getNeighbourCoords(fromCoords);
+        foreach (Vector3Int neighbour in neighbours)
+        {
+            if (toCoords.Equals(neighbour))
+            {
+                answer = true;
+            }
+        }
+        return answer;
     }
     private Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
     {

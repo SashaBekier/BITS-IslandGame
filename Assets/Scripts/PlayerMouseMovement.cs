@@ -108,7 +108,9 @@ public class PlayerMouseMovement : MonoBehaviour
             
             while (pathFound.Count > 0)
             {
-                checkpoints.Enqueue(ground.CellToWorld(pathFound.Dequeue()) + shim);
+                Vector3Int nextCoords = pathFound.Dequeue();
+                Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
+                checkpoints.Enqueue(ground.CellToWorld(nextCoords) + shim);
             }
         }
 
