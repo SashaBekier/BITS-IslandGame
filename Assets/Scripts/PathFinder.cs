@@ -51,7 +51,7 @@ public class PathFinder : MonoBehaviour
             {
                 foreach(KeyValuePair<Vector3Int,int> pair in combinedStepCount)
                 {
-                    bool neighbourCheck = isNeighbourOf(lastEnqueued, pair.Key);
+                    bool neighbourCheck = areAdjacent(lastEnqueued, pair.Key);
                     if(pair.Value == lowestCombined && inboundStepCount[pair.Key] == steps && neighbourCheck) {
                         
                         path.Enqueue(pair.Key);
@@ -67,10 +67,10 @@ public class PathFinder : MonoBehaviour
         return path;
     }
 
-    private bool isNeighbourOf(Vector3Int fromCoords, Vector3Int toCoords)
+    private bool areAdjacent(Vector3Int coords1, Vector3Int toCoords)
     {
         bool answer = false;
-        List<Vector3Int> neighbours = getNeighbourCoords(fromCoords);
+        List<Vector3Int> neighbours = getNeighbourCoords(coords1);
         foreach (Vector3Int neighbour in neighbours)
         {
             if (toCoords.Equals(neighbour))
