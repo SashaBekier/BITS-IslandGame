@@ -31,7 +31,7 @@ public class CharacterSelector : MonoBehaviour
         GameObject spawnedPlayer = Instantiate(characters[characterChoice], playerSpawnPosition, Quaternion.identity) as GameObject;
 
        
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }

@@ -233,8 +233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19243e845996b9b45a0167a80c88795b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ground: {fileID: 0}
-  impassable: {fileID: 0}
+  ground: {fileID: 4517184162346078659, guid: 669d49a3ec19f3140a9ba21620a9df67, type: 3}
+  impassable: {fileID: 3864216871017896665, guid: 148f4c4a19a3f3046a755591e811001f, type: 3}
   playerCollider: {fileID: 5795189526715311914}
 --- !u!114 &5795189526715311909
 MonoBehaviour:
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 703752b2cf37fe34380e90c81dd34773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fogTilemap: {fileID: 0}
+  fogTilemap: {fileID: 5314249812961792411, guid: 2a3aae237e2ae5d4bb70d6ae5199bd80, type: 3}
 --- !u!95 &5795189526715311910
 Animator:
   serializedVersion: 5
