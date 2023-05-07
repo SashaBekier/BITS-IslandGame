@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
 using System.Data;
 using System.Linq;
+using UnityEngine.TextCore.Text;
 
 public class PlayerMouseMovement : MonoBehaviour
 {
@@ -16,7 +17,12 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
-    
+    private string heroType = "Warrior";
+
+    public AnimatorOverrideController warriorAnimator;
+    public AnimatorOverrideController huntressAnimator;
+
+
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -53,6 +59,19 @@ public class PlayerMouseMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (heroType.Equals("Warrior"))
+            {
+                initialiseHuntress();
+            } else if (heroType.Equals("Huntress"))
+            {
+                initialiseWarrior();
+            }
+        }
+
+
+
         Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -90,7 +109,19 @@ public class PlayerMouseMovement : MonoBehaviour
         }
         
     }
+    
 
+    private void initialiseWarrior()
+    {
+        heroType = "Warrior";
+        GetComponent<Animator>().runtimeAnimatorController = warriorAnimator as RuntimeAnimatorController;
+    }
+
+    private void initialiseHuntress()
+    {
+        heroType = "Huntress";
+        GetComponent<Animator>().runtimeAnimatorController = huntressAnimator as RuntimeAnimatorController;
+    }
     private void MouseClick()
     {
         if (EventSystem.current.IsPointerOverGameObject())
