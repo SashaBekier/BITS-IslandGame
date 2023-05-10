@@ -18,15 +18,11 @@ public class initialiseMap : MonoBehaviour
     public Tilemap terrainTilemap;
 
     public Tile oceanTile;
-//    public Tile groundTile1;
-//    public Tile groundTile2;
-//    public Tile groundTile3;
+
     public Tile rockTile;
     public Tile fogTile;
     public Tile collisionTile;
-//    public Tile puzzleTile1;
-//    public Tile puzzleTile2;
-//    public Tile puzzleTile3;
+
 
     public Tile[] puzzleTiles;
     public Tile[] groundTiles;
@@ -37,6 +33,8 @@ public class initialiseMap : MonoBehaviour
     public Item[] items;
     public Item_Edible[] edibles;
     public Pickupable worldItemPrefab;
+    public Scenery[] plants;
+    public WorldScenery sceneryPrefab;
 
 
 
@@ -65,12 +63,13 @@ public class initialiseMap : MonoBehaviour
         SetOceanTones();
 
         SpawnEdibles();
+        SpawnPlants();
 
     }
 
     private void SpawnEdibles()
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 20; i++)
         {
             UnityEngine.Debug.Log("Spawning Apples");
             int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
@@ -81,6 +80,23 @@ public class initialiseMap : MonoBehaviour
             Pickupable newItem = Instantiate(worldItemPrefab, appleposition, Quaternion.identity);
             Pickupable worldItem = newItem.GetComponent<Pickupable>();
             worldItem.Initialise(edibles[0]);
+
+        }
+    }
+
+    private void SpawnPlants()
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Apples");
+            int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
+            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            WorldScenery newScenery = Instantiate(sceneryPrefab, appleposition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(plants[0]);
 
         }
     }
