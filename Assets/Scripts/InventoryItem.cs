@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     
     
@@ -13,15 +13,29 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Text countText;
     public Text dropText;
 
+    
+
     [HideInInspector] public Transform parentAfterDrag;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Item item;
-  
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+ 
+    }
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
         image.sprite = newItem.image;
         RefreshCount();
+    }
+
+    public void DestroyItem()
+    {
+        Destroy(this);
     }
 
     public void RefreshCount()
@@ -51,5 +65,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parentAfterDrag);
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            Debug.Log("Right Click caught");
+            item.RightClick();
+        }
+    }
 
 }

@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 using static UnityEngine.Random;
 
 
@@ -32,6 +34,10 @@ public class initialiseMap : MonoBehaviour
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
 
+    public Item[] items;
+    public Item_Edible[] edibles;
+    public Pickupable worldItemPrefab;
+
 
 
 
@@ -58,8 +64,25 @@ public class initialiseMap : MonoBehaviour
         FixSingleTileIslands();
         SetOceanTones();
 
+        SpawnEdibles();
 
+    }
 
+    private void SpawnEdibles()
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Apples");
+            int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
+            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            Pickupable newItem = Instantiate(worldItemPrefab, appleposition, Quaternion.identity);
+            Pickupable worldItem = newItem.GetComponent<Pickupable>();
+            worldItem.Initialise(edibles[0]);
+
+        }
     }
 
     void FixSingleTileIslands()

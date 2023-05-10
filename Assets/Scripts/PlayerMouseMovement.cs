@@ -93,7 +93,7 @@ public class PlayerMouseMovement : MonoBehaviour
 
     private void MouseClick()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if(EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }

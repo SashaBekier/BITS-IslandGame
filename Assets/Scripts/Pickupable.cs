@@ -15,6 +15,12 @@ public class Pickupable : MonoBehaviour
     {
         spriteRenderer.sprite = item.image;   
     }
+
+    public void Initialise(Item item)
+    {
+        this.item = item;
+        spriteRenderer.sprite = item.image;
+    }
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
