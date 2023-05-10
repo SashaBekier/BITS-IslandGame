@@ -1919,6 +1919,9 @@ MonoBehaviour:
   edibles:
   - {fileID: 11400000, guid: 3d67b112506b86b4a93966a1520f1fd3, type: 2}
   worldItemPrefab: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
+  plants:
+  - {fileID: 11400000, guid: 122073cdbc0168b4eb7e1cc6f93f06b0, type: 2}
+  sceneryPrefab: {fileID: 578337422275027265, guid: 792ecf7f2e0ca1449b2b847492bb8455, type: 3}
 --- !u!4 &959494598
 Transform:
   m_ObjectHideFlags: 0
