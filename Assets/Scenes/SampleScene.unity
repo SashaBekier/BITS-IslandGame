@@ -1790,8 +1790,6 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 6992751230938003758, guid: 18a58e1d3e74c214eb92f327f3c46022, type: 3}
   startItems:
   - {fileID: 11400000, guid: 7cf3e99537be0f847894fdfe127beef9, type: 2}
-  - {fileID: 11400000, guid: 3da50fee7ecb2784d82bbca866712141, type: 2}
-  - {fileID: 11400000, guid: 3da50fee7ecb2784d82bbca866712141, type: 2}
 --- !u!4 &899930896
 Transform:
   m_ObjectHideFlags: 0
@@ -2758,7 +2756,7 @@ PrefabInstance:
     - target: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: 3a10f850b41853143965be01272e0b9d, type: 2}
+      objectReference: {fileID: 11400000, guid: 0e1bb07e85962b44cae7e202c9f931ee, type: 2}
     - target: {fileID: 6301621456707519063, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
       propertyPath: m_Name
       value: Book3
@@ -2882,6 +2880,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 122539488}
     m_Modifications:
+    - target: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d15aba739d9355439431186d95da6bc, type: 2}
     - target: {fileID: 6301621456707519063, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
       propertyPath: m_Name
       value: Book1
@@ -3335,7 +3337,7 @@ PrefabInstance:
     - target: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: 101b4d20f3748224b94324f729e22080, type: 2}
+      objectReference: {fileID: 11400000, guid: f30bc65cc8fc3214ca54970c834d0c84, type: 2}
     - target: {fileID: 6301621456707519063, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
       propertyPath: m_Name
       value: Book2
