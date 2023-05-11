@@ -15,6 +15,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 77fd7559f9d580a418fb63436b9039bb, type: 3}
   spriteDensityMin: 1
   spriteDensityMax: 3
-  isClumping: 0.5
+  isClumping: 0.8
   isImpassable: 0
   sizeVariability: 0.2

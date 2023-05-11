@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 07ddb0030cb933b4f85830ec9beeffe2, type: 3}
   spriteDensityMin: 1
-  spriteDensityMax: 2
-  isClumping: 0.3
-  isImpassable: 0
+  spriteDensityMax: 4
+  isClumping: 0.5
+  isImpassable: 1
   sizeVariability: 0.5

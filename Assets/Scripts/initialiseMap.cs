@@ -250,8 +250,23 @@ public class initialiseMap : MonoBehaviour
                 {
                     if (hasNeighbouringLand(tileCoords) == 0)
                     {
+                        List<Vector3Int> neighbours = finder.getNeighbourCoords(tileCoords);
+                        bool isDeeps = true;
+                        foreach (Vector3Int neighbour in neighbours)
+                        {
+                            if (hasNeighbouringLand(neighbour) > 0)
+                            {
+                                isDeeps = false;
+                            }
+                        }
                         terrainTilemap.SetTileFlags(tileCoords, TileFlags.None);
-                        terrainTilemap.SetColor(tileCoords, new Color(0f, .4155f, 1f, 1f)); 
+                        if (isDeeps)
+                        {
+                            terrainTilemap.SetColor(tileCoords, new Color(0.1f, .2155f, .9f, 1f));
+                        } else
+                        {
+                            terrainTilemap.SetColor(tileCoords, new Color(0f, .6f, .8f, 1f));
+                        }
                     }
                 }
             }
