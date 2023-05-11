@@ -7,8 +7,7 @@ public class CharacterSelector : MonoBehaviour
     // First spawn player prefab
     public GameObject player;
 
-    //Review: Player Position may already be in other location
-   // public Vector3 playerSpawnPosition = new Vector3 (0, 1, -7);
+    // Review: Player Position may already be in other location  
 
     public Character[] characters;
 
