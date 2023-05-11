@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item_Edible", menuName = "ScriptableObject/Item - Edible")]
 public class Item_Edible : Item
 {
-    public int healthGain;
-    public int magicGain;
+    public int healthChange;
+    public int magicChange;
     
 
     // Start is called before the first frame update
@@ -25,8 +25,8 @@ public class Item_Edible : Item
     {
         Debug.Log("Item_Edible Right Click Called");
         PlayerStats player = GameObject.Find("Warrior").GetComponent<PlayerStats>();
-        player.gainHealth(healthGain);
-        player.gainMagic(magicGain);
+        player.adjustCurrentHealth(healthChange);
+        player.adjustCurrentMagic(magicChange);
 
         Item thisItem = this;
         InventoryManager.instance.DestroyItem(thisItem);

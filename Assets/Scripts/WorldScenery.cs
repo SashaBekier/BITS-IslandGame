@@ -30,7 +30,7 @@ public class WorldScenery : MonoBehaviour, IPointerClickHandler
             Debug.Log("Right Click caught");
             scenery.RightClick();
         }
-        if(eventData.button == PointerEventData.InputButton.Left && !scenery.isImpassable)
+        if(eventData.button == PointerEventData.InputButton.Left)
         {
             Debug.Log("Left click caught");
             PlayerMouseMovement player = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>();

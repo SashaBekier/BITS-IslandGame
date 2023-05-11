@@ -80,7 +80,7 @@ public class PathFinder : MonoBehaviour
         }
         return answer;
     }
-    private Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
+    public Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
     {
         Queue<Vector3Int> checkNeighboursOf = new Queue<Vector3Int>();
         Dictionary<Vector3Int, int> answer = new Dictionary<Vector3Int, int>();
@@ -108,7 +108,7 @@ public class PathFinder : MonoBehaviour
     }
 
 
-    private List<Vector3Int> getNeighbourCoords(Vector3Int coords)
+    public List<Vector3Int> getNeighbourCoords(Vector3Int coords)
     {
         List<Vector3Int> neighbours = new List<Vector3Int>();
         if (coords.x > 0)
