@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 898edc031dadaba43bb2a644c00041e8, type: 3}
-  m_Name: Book1
+  m_Script: {fileID: 11500000, guid: 72e1f3f67fd90d64796f444018522819, type: 3}
+  m_Name: Apple
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 8a55fe38648286a46ba6ee5587195310, type: 3}
-  maxStack: 10
+  image: {fileID: 21300000, guid: eb8e02e05cdea5448b98a966bc4da9d5, type: 3}
+  maxStack: 20
+  healthChange: 5
+  magicChange: 0

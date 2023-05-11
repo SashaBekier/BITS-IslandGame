@@ -1,30 +1,33 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using System.Linq;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 using static UnityEngine.Random;
 
 
 public class initialiseMap : MonoBehaviour
 {
+    private PathFinder finder;
+
     public int islandSize = 50;
+    
     public Tilemap fogTilemap;
     public Tilemap impassableTilemap;
     public Tilemap terrainTilemap;
 
+    List<Vector3Int> availableCoords = new List<Vector3Int>();
+
     public Tile oceanTile;
-//    public Tile groundTile1;
-//    public Tile groundTile2;
-//    public Tile groundTile3;
+
     public Tile rockTile;
     public Tile fogTile;
     public Tile collisionTile;
-//    public Tile puzzleTile1;
-//    public Tile puzzleTile2;
-//    public Tile puzzleTile3;
+
 
     public Tile[] puzzleTiles;
     public Tile[] groundTiles;
@@ -32,12 +35,21 @@ public class initialiseMap : MonoBehaviour
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
 
+    public Item[] items;
+    public Item_Edible[] edibles;
+    public Item_PuzzlePiece[] puzzlePieces;
+    public Pickupable worldItemPrefab;
+    public Scenery[] plants;
+    public WorldScenery sceneryPrefab;
+    public Scenery[] puzzleReceivers;
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        finder = PathFinder.instance;
         //UnityEngine.Random.InitState(16726);
 
         //initialise tile randomisation arrays
@@ -49,6 +61,7 @@ public class initialiseMap : MonoBehaviour
         groundTiles[1] = groundTile2;
         groundTiles[2] = groundTile3;
 */
+        initialiseAvailableTiles();
 
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
@@ -58,30 +71,170 @@ public class initialiseMap : MonoBehaviour
         FixSingleTileIslands();
         SetOceanTones();
 
+        SpawnEdibles();
+        SpawnPlants();
+        SpawnPuzzlePieces();
 
+    }
 
+    private void initialiseAvailableTiles()
+    {
+        for (int i = 0; i < islandSize; i++)
+        {
+            for(int j=0; j < islandSize; j++)
+            {
+                availableCoords.Add(new Vector3Int(i, j));
+            }
+        }
+    }
+
+    private bool coordsAreAvailable(Vector3Int coords)
+    {
+        if (availableCoords.Contains(coords))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void setCoordsUnavailable(Vector3Int coords)
+    {
+        if (availableCoords.Contains(coords))
+        {
+            availableCoords.Remove(coords);
+        }
+    }
+
+    private void SpawnEdibles()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Edibles");
+            Vector3Int gridPosition1 = getTargetTile();
+            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            Pickupable newItem = Instantiate(worldItemPrefab, appleposition, Quaternion.identity);
+            Pickupable worldItem = newItem.GetComponent<Pickupable>();
+            worldItem.Initialise(edibles[UnityEngine.Random.Range(0,edibles.Length)]);
+            setCoordsUnavailable(gridPosition1);
+                
+
+        }
+    }
+
+    private Vector3Int getTargetTile()
+    {
+        Vector3Int gridPosition1 = availableCoords[UnityEngine.Random.Range(0,availableCoords.Count)];
+        return gridPosition1;
+        
+    }
+
+    private void SpawnPuzzlePieces()
+    {
+        for (int i = 0; i < puzzlePieces.Length; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Books");
+            Vector3Int gridPosition1 = getTargetTile();
+            Vector3 bookposition = terrainTilemap.CellToWorld(gridPosition1);
+            Pickupable newItem = Instantiate(worldItemPrefab, bookposition, Quaternion.identity);
+            Pickupable worldItem = newItem.GetComponent<Pickupable>();
+            worldItem.Initialise(puzzlePieces[i]);
+            setCoordsUnavailable(gridPosition1);
+
+        }
+    }
+
+    private void SpawnPlants()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Plants");
+            Vector3Int gridPosition1 = getTargetTile();
+            int plantIndex = UnityEngine.Random.Range(0, plants.Length);
+            int plantDensity = UnityEngine.Random.Range(plants[plantIndex].spriteDensityMin, plants[plantIndex].spriteDensityMax+1);
+            for (int j = 0; j < plantDensity; j++)
+            {
+                bool getNeighbour = false;
+                do
+                {
+                    SpawnPlant(gridPosition1, plantIndex, getNeighbour);
+                    getNeighbour = true;
+                } while (UnityEngine.Random.Range(0f, 1f) < plants[plantIndex].isClumping);
+            }
+
+        }
+    }
+
+    private void SpawnPlant(Vector3Int gridPosition1, int plantIndex, bool shiftToNeighbour)
+    {
+        if (shiftToNeighbour)
+        {
+            List<Vector3Int> toRemove = new List<Vector3Int>();
+            List<Vector3Int> neighbours = finder.getNeighbourCoords(gridPosition1);
+            foreach (Vector3Int neighbour in neighbours)
+            {
+                if (!coordsAreAvailable(neighbour)) // TODO fix with avaiulableTiles List
+                {
+                    toRemove.Add(neighbour);
+                }
+            }
+            foreach(Vector3Int coords in toRemove)
+            {
+                neighbours.Remove(coords);
+            }
+            if (neighbours.Count > 0)
+            {
+                gridPosition1 = neighbours[UnityEngine.Random.Range(0, neighbours.Count)];
+            }
+
+        }
+        
+        Vector3 plantPosition = offsetPositionWithinCell(gridPosition1);
+        if (plants[plantIndex].isImpassable)
+        {
+            impassableTilemap.SetTile(gridPosition1, collisionTile);
+        }
+        
+        WorldScenery newScenery = Instantiate(sceneryPrefab, plantPosition, Quaternion.identity);
+        WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+        worldScenery.Initialise(plants[plantIndex]);
+        float scaleMod = UnityEngine.Random.Range(1 - worldScenery.scenery.sizeVariability, 1 + worldScenery.scenery.sizeVariability);
+        worldScenery.transform.localScale = new Vector3(scaleMod, scaleMod);
+        setCoordsUnavailable(gridPosition1);
+    }
+
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
+    {
+        Vector3 plantPosition = terrainTilemap.CellToWorld(cellPosition);
+        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.25f + yOffset, +.25f + yOffset), 0);
+        return plantPosition;
+    }
+
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition)
+    {
+        return offsetPositionWithinCell(cellPosition, .25f);
     }
 
     void FixSingleTileIslands()
     {
+        Dictionary<Vector3Int, int> steps = finder.GenerateStepCount(new Vector3Int(islandSize / 2, islandSize / 2));
         for (int xcoord = 0; xcoord <= islandSize; xcoord++)
         {
             for (int ycoord = 0; ycoord <= islandSize; ycoord++)
             {
-                Vector3Int tileCoords = new Vector3Int(xcoord, ycoord, 0);
-                foreach (Tile landTile in groundTiles)
+                Vector3Int coords = new Vector3Int(xcoord, ycoord);
+                Debug.Log(coords + " " +terrainTilemap.GetTile(coords).ToString());
+                if (!terrainTilemap.GetTile(coords).ToString().Equals("ocean_tile"))
                 {
-                    if (terrainTilemap.GetTile<Tile>(tileCoords) == landTile)
+                    
+                    if (!steps.ContainsKey(coords))
                     {
-                        if (hasNeighbouringLand(tileCoords) == 0)
-                        {
-                            setOceanTile(tileCoords);
-                        }
+                                                
+                            setOceanTile(coords);
+                        
                     }
                 }
-                
-                           
-            }
+          }
         }
     }
 
@@ -97,8 +250,23 @@ public class initialiseMap : MonoBehaviour
                 {
                     if (hasNeighbouringLand(tileCoords) == 0)
                     {
+                        List<Vector3Int> neighbours = finder.getNeighbourCoords(tileCoords);
+                        bool isDeeps = true;
+                        foreach (Vector3Int neighbour in neighbours)
+                        {
+                            if (hasNeighbouringLand(neighbour) > 0)
+                            {
+                                isDeeps = false;
+                            }
+                        }
                         terrainTilemap.SetTileFlags(tileCoords, TileFlags.None);
-                        terrainTilemap.SetColor(tileCoords, new Color(0f, .4155f, 1f, 1f)); 
+                        if (isDeeps)
+                        {
+                            terrainTilemap.SetColor(tileCoords, new Color(0.1f, .2155f, .9f, 1f));
+                        } else
+                        {
+                            terrainTilemap.SetColor(tileCoords, new Color(0f, .6f, .8f, 1f));
+                        }
                     }
                 }
             }
@@ -228,6 +396,7 @@ public class initialiseMap : MonoBehaviour
     {
         terrainTilemap.SetTile(tileCoords, oceanTile);
         impassableTilemap.SetTile(tileCoords, collisionTile);
+        setCoordsUnavailable(tileCoords);
     }
 
     void setLandTile(Vector3Int tileCoords)

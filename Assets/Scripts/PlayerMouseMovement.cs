@@ -5,7 +5,8 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
-
+using System.Data;
+using System.Linq;
 
 public class PlayerMouseMovement : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
+    private bool isPointerOverGameObject = true;
+
+
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -42,8 +46,10 @@ public class PlayerMouseMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
+        mouseInput.Mouse.MouseClick.performed += _ => MouseClick(true);
         targetLocation = transform.position;
+
+        
     }
 
     // Update is called once per frame
@@ -84,22 +90,44 @@ public class PlayerMouseMovement : MonoBehaviour
             gridPosition = ground.WorldToCell(transform.position - shim);
             targetLocation = ground.CellToWorld(gridPosition) + shim;
         }
-        
-    }
-
-    private void MouseClick()
-    {
         if (EventSystem.current.IsPointerOverGameObject())
         {
-            return;
+            isPointerOverGameObject = true;
+        } else
+        {
+            isPointerOverGameObject = false;
+        }
+    }
+
+    public void MouseClick(bool checkPointer)
+    {
+        if(isPointerOverGameObject && checkPointer)
+        {
+           return;
         }
         Vector2 mousePosition = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
         {
-            checkpoints.Enqueue(ground.CellToWorld(gridPosition) + shim);            
+            Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
+            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
+            checkpoints.Clear();
+            
+            while (pathFound.Count > 0)
+            {
+                Vector3Int nextCoords = pathFound.Dequeue();
+                Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
+                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+            }
         }
 
+    }
+
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
+    {
+        Vector3 plantPosition = impassable.CellToWorld(cellPosition);
+        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        return plantPosition;
     }
 }
