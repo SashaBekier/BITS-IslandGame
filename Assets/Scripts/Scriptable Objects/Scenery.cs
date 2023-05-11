@@ -8,6 +8,7 @@ public class Scenery : ScriptableObject
     public int spriteDensityMax;
     public float isClumping; //will be used to decide if this tends to occcur by itself or in groups
     public bool isImpassable;
+    public float sizeVariability;
 
 
     public float getImageWidth()

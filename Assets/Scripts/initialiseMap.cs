@@ -198,6 +198,8 @@ public class initialiseMap : MonoBehaviour
         WorldScenery newScenery = Instantiate(sceneryPrefab, plantPosition, Quaternion.identity);
         WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
         worldScenery.Initialise(plants[plantIndex]);
+        float scaleMod = UnityEngine.Random.Range(1 - worldScenery.scenery.sizeVariability, 1 + worldScenery.scenery.sizeVariability);
+        worldScenery.transform.localScale = new Vector3(scaleMod, scaleMod);
         setCoordsUnavailable(gridPosition1);
     }
 
