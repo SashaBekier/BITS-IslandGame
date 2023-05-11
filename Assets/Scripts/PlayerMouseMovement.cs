@@ -16,7 +16,9 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 targetLocation;
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
-    
+    private bool isPointerOverGameObject = true;
+
+
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -88,12 +90,18 @@ public class PlayerMouseMovement : MonoBehaviour
             gridPosition = ground.WorldToCell(transform.position - shim);
             targetLocation = ground.CellToWorld(gridPosition) + shim;
         }
-        
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            isPointerOverGameObject = true;
+        } else
+        {
+            isPointerOverGameObject = false;
+        }
     }
 
     private void MouseClick()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if(isPointerOverGameObject)
         {
             return;
         }

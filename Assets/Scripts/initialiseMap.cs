@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 using static UnityEngine.Random;
 
 
@@ -16,21 +18,23 @@ public class initialiseMap : MonoBehaviour
     public Tilemap terrainTilemap;
 
     public Tile oceanTile;
-//    public Tile groundTile1;
-//    public Tile groundTile2;
-//    public Tile groundTile3;
+
     public Tile rockTile;
     public Tile fogTile;
     public Tile collisionTile;
-//    public Tile puzzleTile1;
-//    public Tile puzzleTile2;
-//    public Tile puzzleTile3;
+
 
     public Tile[] puzzleTiles;
     public Tile[] groundTiles;
 
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
+
+    public Item[] items;
+    public Item_Edible[] edibles;
+    public Pickupable worldItemPrefab;
+    public Scenery[] plants;
+    public WorldScenery sceneryPrefab;
 
 
 
@@ -58,8 +62,43 @@ public class initialiseMap : MonoBehaviour
         FixSingleTileIslands();
         SetOceanTones();
 
+        SpawnEdibles();
+        SpawnPlants();
 
+    }
 
+    private void SpawnEdibles()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Apples");
+            int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
+            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            Pickupable newItem = Instantiate(worldItemPrefab, appleposition, Quaternion.identity);
+            Pickupable worldItem = newItem.GetComponent<Pickupable>();
+            worldItem.Initialise(edibles[0]);
+
+        }
+    }
+
+    private void SpawnPlants()
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Apples");
+            int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
+            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            WorldScenery newScenery = Instantiate(sceneryPrefab, appleposition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(plants[0]);
+
+        }
     }
 
     void FixSingleTileIslands()
