@@ -8,7 +8,7 @@ public class CharacterSelector : MonoBehaviour
     public GameObject player;
 
     //Review: Player Position may already be in other location
-    public Vector3 playerSpawnPosition = new Vector3 (0, 1, -7);
+   // public Vector3 playerSpawnPosition = new Vector3 (0, 1, -7);
 
     public Character[] characters;
 
@@ -18,9 +18,10 @@ public class CharacterSelector : MonoBehaviour
     public void StartGame(int characterChoice)
     {
         characterSelectPanel.SetActive(false);
+        Debug.Log("instart");
         //TODO activev stats panel.
         playerSpecificStats.SetActive(true);
-        GameObject spawnedPlayer = Instantiate(player, playerSpawnPosition, Quaternion.identity) as GameObject;
+       // GameObject spawnedPlayer = Instantiate(player, playerSpawnPosition, Quaternion.identity) as GameObject;
 
         //Index 0 will be the first Character e.g. Warrior
         Character selectedCharacter = characters[characterChoice]; 
