@@ -2062,6 +2062,7 @@ MonoBehaviour:
   plants:
   - {fileID: 11400000, guid: 122073cdbc0168b4eb7e1cc6f93f06b0, type: 2}
   - {fileID: 11400000, guid: d2ea0abb5ddb0f6459c9cf0531e85bda, type: 2}
+  - {fileID: 11400000, guid: e1cd0fe1e710465488bc0bc32bf3ec63, type: 2}
   sceneryPrefab: {fileID: 578337422275027265, guid: 792ecf7f2e0ca1449b2b847492bb8455, type: 3}
   puzzleReceivers: []
 --- !u!4 &959494598
