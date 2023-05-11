@@ -32,6 +32,7 @@ public class initialiseMap : MonoBehaviour
 
     public Item[] items;
     public Item_Edible[] edibles;
+    public Item_PuzzlePiece[] puzzlePieces;
     public Pickupable worldItemPrefab;
     public Scenery[] plants;
     public WorldScenery sceneryPrefab;
@@ -64,6 +65,7 @@ public class initialiseMap : MonoBehaviour
 
         SpawnEdibles();
         SpawnPlants();
+        SpawnPuzzlePieces();
 
     }
 
@@ -80,6 +82,23 @@ public class initialiseMap : MonoBehaviour
             Pickupable newItem = Instantiate(worldItemPrefab, appleposition, Quaternion.identity);
             Pickupable worldItem = newItem.GetComponent<Pickupable>();
             worldItem.Initialise(edibles[0]);
+
+        }
+    }
+
+    private void SpawnPuzzlePieces()
+    {
+        for (int i = 0; i < puzzlePieces.Length; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Books");
+            int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
+            Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
+            Vector3 bookposition = terrainTilemap.CellToWorld(gridPosition1);
+
+            Pickupable newItem = Instantiate(worldItemPrefab, bookposition, Quaternion.identity);
+            Pickupable worldItem = newItem.GetComponent<Pickupable>();
+            worldItem.Initialise(puzzlePieces[i]);
 
         }
     }
