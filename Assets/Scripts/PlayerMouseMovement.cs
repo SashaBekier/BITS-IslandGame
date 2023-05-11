@@ -118,14 +118,16 @@ public class PlayerMouseMovement : MonoBehaviour
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                checkpoints.Enqueue(ground.CellToWorld(nextCoords) + shim);
+                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
             }
         }
 
     }
 
-    public void doMove(Vector3 targetPosition)
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
     {
-
+        Vector3 plantPosition = impassable.CellToWorld(cellPosition);
+        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        return plantPosition;
     }
 }
