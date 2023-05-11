@@ -32,41 +32,41 @@ public class PlayerStats : MonoBehaviour
         return totalModifier;
     }
 
-    public void gainHealth(int amount)
+    public void adjustCurrentHealth(int amount)
     {
         currentHealth += amount;
         if (currentHealth > HealthTotal) {
         currentHealth = HealthTotal;
         }
-        Debug.Log("Health Gained");
-    }
-
-    public void loseHealth(int amount)
-    {
-        currentHealth -= amount;
-        if (currentHealth < 1) {
+        if (currentHealth < 1)
+        {
             playerDeath();
+        }
+        if (amount > 0)
+        {
+            Debug.Log(amount + "Health Gained");
+        } else
+        {
+            Debug.Log(amount*-1 + "Health Lost");
         }
     }
 
+
     private void playerDeath()
     {
-
+        Debug.Log("Player has died");
     }
 
-    public void gainMagic(int amount)
+
+
+    public bool adjustCurrentMagic(int amount)
     {
         currentMagic += amount;
         if (currentMagic > MagicTotal)
         {
             currentMagic = MagicTotal;
         }
-    }
-
-    public bool loseMagic(int amount)
-    {
-        currentMagic -= amount;
-        if(currentMagic < 0) {
+        if (currentMagic < 0) {
             currentMagic += amount;
             return false;
         } else
