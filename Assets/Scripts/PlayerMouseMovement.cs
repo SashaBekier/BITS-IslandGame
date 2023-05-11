@@ -46,7 +46,7 @@ public class PlayerMouseMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mouseInput.Mouse.MouseClick.performed += _ => MouseClick();
+        mouseInput.Mouse.MouseClick.performed += _ => MouseClick(true);
         targetLocation = transform.position;
 
         
@@ -99,11 +99,11 @@ public class PlayerMouseMovement : MonoBehaviour
         }
     }
 
-    private void MouseClick()
+    public void MouseClick(bool checkPointer)
     {
-        if(isPointerOverGameObject)
+        if(isPointerOverGameObject && checkPointer)
         {
-            return;
+           return;
         }
         Vector2 mousePosition = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -124,5 +124,8 @@ public class PlayerMouseMovement : MonoBehaviour
 
     }
 
-    
+    public void doMove(Vector3 targetPosition)
+    {
+
+    }
 }

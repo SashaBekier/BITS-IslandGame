@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2994180541903024341}
   - component: {fileID: 2994180541903024340}
-  - component: {fileID: 6548938059442438935}
   - component: {fileID: 578337422275027265}
+  - component: {fileID: -8918403457275956207}
   m_Layer: 7
-  m_Name: Scenery
+  m_Name: WorldScenery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,32 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &6548938059442438935
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2994180541903024345}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.85333335, y: 1.16}
-    newSize: {x: 4.59, y: 4.44}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.48}
-  m_EdgeRadius: 0
 --- !u!114 &578337422275027265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,3 +100,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenery: {fileID: 0}
   spriteRenderer: {fileID: 2994180541903024340}
+--- !u!60 &-8918403457275956207
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2994180541903024345}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.85333335, y: 1.16}
+    newSize: {x: 4.59, y: 4.44}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.13333334, y: -0.29000002}
+      - {x: 0.18333334, y: -0.27333334}
+      - {x: 0.22333334, y: -0.25}
+      - {x: 0.24333334, y: -0.24666667}
+      - {x: 0.29333335, y: -0.23}
+      - {x: 0.33333334, y: -0.20666668}
+      - {x: 0.35333335, y: -0.20333333}
+      - {x: 0.38333336, y: -0.19}
+      - {x: 0.42666668, y: -0.17}
+      - {x: 0.42666668, y: 0.17333333}
+      - {x: 0.42333335, y: 0.17666668}
+      - {x: 0.4, y: 0.18666667}
+      - {x: 0.38333336, y: 0.19333334}
+      - {x: 0.053333335, y: 0.32333335}
+      - {x: 0.01, y: 0.34}
+      - {x: -0.01, y: 0.34}
+      - {x: -0.086666666, y: 0.31}
+      - {x: -0.13333334, y: 0.29333335}
+      - {x: -0.16333334, y: 0.28}
+      - {x: -0.19666667, y: 0.26666668}
+      - {x: -0.24000001, y: 0.24666667}
+      - {x: -0.26000002, y: 0.24333334}
+      - {x: -0.31, y: 0.22666667}
+      - {x: -0.36666667, y: 0.2}
+      - {x: -0.4, y: 0.18666667}
+      - {x: -0.42666668, y: 0.17333333}
+      - {x: -0.42666668, y: -0.17333333}
+      - {x: -0.33666667, y: -0.21333334}
+      - {x: -0.22333334, y: -0.25333333}
+      - {x: -0.11333334, y: -0.29666668}
+      - {x: -0.01, y: -0.33666667}
+      - {x: 0.016666668, y: -0.33666667}
+      - {x: 0.03666667, y: -0.32666668}
+      - {x: 0.07, y: -0.31333333}
+      - {x: 0.11333334, y: -0.29333335}

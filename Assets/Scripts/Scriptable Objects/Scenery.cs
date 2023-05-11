@@ -15,4 +15,9 @@ public class Scenery : ScriptableObject
         float answer = sprite.bounds.size.x;
         return answer;
     }
+
+    public virtual void RightClick()
+    {
+        Debug.Log("Scenery object right clicked on");
+    }
 }
