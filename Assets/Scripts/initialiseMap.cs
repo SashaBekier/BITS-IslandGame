@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using System.Linq;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
@@ -35,6 +35,7 @@ public class initialiseMap : MonoBehaviour
     public Pickupable worldItemPrefab;
     public Scenery[] plants;
     public WorldScenery sceneryPrefab;
+    public Scenery[] puzzleReceivers;
 
 
 
@@ -86,19 +87,35 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnPlants()
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 30; i++)
         {
-            UnityEngine.Debug.Log("Spawning Apples");
+            UnityEngine.Debug.Log("Spawning Plants");
             int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
             int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
             Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
-            Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
-
-            WorldScenery newScenery = Instantiate(sceneryPrefab, appleposition, Quaternion.identity);
-            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
-            worldScenery.Initialise(plants[0]);
+            int plantIndex = UnityEngine.Random.Range(0, plants.Length);
+            int plantDensity = UnityEngine.Random.Range(plants[plantIndex].spriteDensityMin, plants[plantIndex].spriteDensityMax+1);
+            for (int j = 0; j < plantDensity; j++)
+            {
+                Vector3 plantPosition = offsetPositionWithinCell(gridPosition1);
+                WorldScenery newScenery = Instantiate(sceneryPrefab, plantPosition, Quaternion.identity);
+                WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+                worldScenery.Initialise(plants[plantIndex]);
+            }
 
         }
+    }
+
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
+    {
+        Vector3 plantPosition = terrainTilemap.CellToWorld(cellPosition);
+        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.25f + yOffset, +.25f + yOffset), 0);
+        return plantPosition;
+    }
+
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition)
+    {
+        return offsetPositionWithinCell(cellPosition, .25f);
     }
 
     void FixSingleTileIslands()
