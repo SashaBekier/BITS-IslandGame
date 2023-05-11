@@ -18,14 +18,11 @@ public class CharacterSelector : MonoBehaviour
     public void StartGame(int characterChoice)
     {
         characterSelectPanel.SetActive(false);
-        Debug.Log("instart");
-        //TODO activev stats panel.
+
+        //TODO activate stats panel.
         playerSpecificStats.SetActive(true);
-       // GameObject spawnedPlayer = Instantiate(player, playerSpawnPosition, Quaternion.identity) as GameObject;
 
-        //Index 0 will be the first Character e.g. Warrior
         Character selectedCharacter = characters[characterChoice]; 
-
 
     }
 
