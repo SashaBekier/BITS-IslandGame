@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -13,6 +14,8 @@ using static UnityEngine.Random;
 public class initialiseMap : MonoBehaviour
 {
     private PathFinder finder;
+
+    public GameObject player;
 
     public int islandSize = 50;
     
@@ -34,15 +37,21 @@ public class initialiseMap : MonoBehaviour
 
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
-
+    public WorldScenery sceneryPrefab;
+    public Pickupable worldItemPrefab;
     public Item[] items;
     public Item_Edible[] edibles;
     public Item_PuzzlePiece[] puzzlePieces;
-    public Pickupable worldItemPrefab;
-    public Scenery[] plants;
-    public WorldScenery sceneryPrefab;
-    public Scenery[] puzzleReceivers;
 
+    public Scenery[] plants;
+
+    public Scenery[] puzzleReceivers;
+    public Scenery[] rocks;
+
+
+
+
+    private Vector3 playerShim = new Vector3(0f, .4f, 0f);
 
 
 
@@ -63,6 +72,8 @@ public class initialiseMap : MonoBehaviour
 */
         initialiseAvailableTiles();
 
+        
+
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
@@ -70,11 +81,52 @@ public class initialiseMap : MonoBehaviour
 
         FixSingleTileIslands();
         SetOceanTones();
+        
+        
 
         SpawnEdibles();
         SpawnPlants();
+        
+        SpawnRocks();
+        PlacePlayer();
         SpawnPuzzlePieces();
 
+    }
+
+    private void PlacePlayer()
+    {
+        Vector3Int gridPosition1;
+        do {
+            gridPosition1 = getTargetTile();
+            Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
+            player.transform.position = worldPos + playerShim;
+        } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
+        setCoordsUnavailable(gridPosition1);
+    }
+
+    private void SpawnRocks()
+    {
+        for (int i = 0; i < 250; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Rocks");
+            Vector3Int gridPosition1 = getTargetTile();
+            int rockIndex = UnityEngine.Random.Range(0, rocks.Length);
+            
+            Vector3 rockPosition = terrainTilemap.CellToWorld(gridPosition1);
+            if (rocks[rockIndex].isImpassable)
+            {
+                impassableTilemap.SetTile(gridPosition1, collisionTile);
+            }
+
+            WorldScenery newScenery = Instantiate(sceneryPrefab, rockPosition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(rocks[rockIndex]);
+            float scaleMod = UnityEngine.Random.Range(1 - worldScenery.scenery.sizeVariability, 1 + worldScenery.scenery.sizeVariability);
+            worldScenery.transform.localScale = new Vector3(scaleMod, scaleMod);
+            setCoordsUnavailable(gridPosition1);
+
+
+        }
     }
 
     private void initialiseAvailableTiles()
@@ -86,6 +138,7 @@ public class initialiseMap : MonoBehaviour
                 availableCoords.Add(new Vector3Int(i, j));
             }
         }
+        setCoordsUnavailable(new Vector3Int(islandSize / 2, islandSize / 2)); 
     }
 
     private bool coordsAreAvailable(Vector3Int coords)
@@ -133,8 +186,14 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < puzzlePieces.Length; i++)
         {
+            Vector3Int gridPosition1;
+            
             UnityEngine.Debug.Log("Spawning Books");
-            Vector3Int gridPosition1 = getTargetTile();
+            
+            do {
+                gridPosition1 = getTargetTile();
+                
+            } while (!accessibleToPlayer(gridPosition1));
             Vector3 bookposition = terrainTilemap.CellToWorld(gridPosition1);
             Pickupable newItem = Instantiate(worldItemPrefab, bookposition, Quaternion.identity);
             Pickupable worldItem = newItem.GetComponent<Pickupable>();
@@ -142,6 +201,13 @@ public class initialiseMap : MonoBehaviour
             setCoordsUnavailable(gridPosition1);
 
         }
+    }
+
+    private bool accessibleToPlayer(Vector3Int coords)
+    {
+        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position - playerShim );
+        Dictionary<Vector3Int, int>  steps = finder.GenerateStepCount(playerPosition);
+        return steps.ContainsKey(coords);
     }
 
     private void SpawnPlants()

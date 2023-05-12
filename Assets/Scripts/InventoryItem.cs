@@ -65,6 +65,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parentAfterDrag);
     }
 
+    public void moveToSlot(Transform parent)
+    {
+        transform.SetParent(parent);
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right) {

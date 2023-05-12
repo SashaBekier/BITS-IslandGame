@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f1d4603d0080cb4e8537e8cc5384c9f, type: 3}
-  m_Name: GreenPalm
+  m_Name: rock4
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 07ddb0030cb933b4f85830ec9beeffe2, type: 3}
+  sprite: {fileID: 21300000, guid: cf6427e595b50b94386b9b516a25a678, type: 3}
   spriteDensityMin: 1
-  spriteDensityMax: 4
-  isClumping: 0.5
-  isImpassable: 0
-  sizeVariability: 0.5
+  spriteDensityMax: 1
+  isClumping: 0.25
+  isImpassable: 1
+  sizeVariability: 0.4
