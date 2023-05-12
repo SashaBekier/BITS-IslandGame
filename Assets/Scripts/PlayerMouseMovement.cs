@@ -26,7 +26,7 @@ public class PlayerMouseMovement : MonoBehaviour
     public AnimatorOverrideController huntressAnimator; //Player Selection animation.
 
     private Animator animator;
-    private Vector3 shim = new Vector3(0f, .4f, 0f);
+    private Vector3 shim = new Vector3(0f, .0f, 0f);
     private Vector3 previousPosition; //Used for Walking Animations.
 
     private Vector3 lastCheckpointPosition;
