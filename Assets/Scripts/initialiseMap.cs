@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -49,6 +50,11 @@ public class initialiseMap : MonoBehaviour
 
 
 
+
+    private Vector3 playerShim = new Vector3(0f, .4f, 0f);
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,7 +72,7 @@ public class initialiseMap : MonoBehaviour
 */
         initialiseAvailableTiles();
 
-        PlacePlayer();
+        
 
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
@@ -76,20 +82,25 @@ public class initialiseMap : MonoBehaviour
         FixSingleTileIslands();
         SetOceanTones();
         
-        SpawnPuzzlePieces();
+        
 
         SpawnEdibles();
         SpawnPlants();
         
         SpawnRocks();
+        PlacePlayer();
+        SpawnPuzzlePieces();
 
     }
 
     private void PlacePlayer()
     {
-        Vector3Int gridPosition1 = getTargetTile();
-        Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
-        player.transform.position = worldPos;
+        Vector3Int gridPosition1;
+        do {
+            gridPosition1 = getTargetTile();
+            Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
+            player.transform.position = worldPos - playerShim;
+        } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
         setCoordsUnavailable(gridPosition1);
     }
 
@@ -127,6 +138,7 @@ public class initialiseMap : MonoBehaviour
                 availableCoords.Add(new Vector3Int(i, j));
             }
         }
+        setCoordsUnavailable(new Vector3Int(islandSize / 2, islandSize / 2)); 
     }
 
     private bool coordsAreAvailable(Vector3Int coords)
@@ -174,8 +186,14 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < puzzlePieces.Length; i++)
         {
+            Vector3Int gridPosition1;
+            
             UnityEngine.Debug.Log("Spawning Books");
-            Vector3Int gridPosition1 = getTargetTile();
+            
+            do {
+                gridPosition1 = getTargetTile();
+                
+            } while (!accessibleToPlayer(gridPosition1));
             Vector3 bookposition = terrainTilemap.CellToWorld(gridPosition1);
             Pickupable newItem = Instantiate(worldItemPrefab, bookposition, Quaternion.identity);
             Pickupable worldItem = newItem.GetComponent<Pickupable>();
@@ -183,6 +201,13 @@ public class initialiseMap : MonoBehaviour
             setCoordsUnavailable(gridPosition1);
 
         }
+    }
+
+    private bool accessibleToPlayer(Vector3Int coords)
+    {
+        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position - playerShim );
+        Dictionary<Vector3Int, int>  steps = finder.GenerateStepCount(playerPosition);
+        return steps.ContainsKey(coords);
     }
 
     private void SpawnPlants()

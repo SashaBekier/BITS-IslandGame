@@ -16,5 +16,5 @@ MonoBehaviour:
   spriteDensityMin: 1
   spriteDensityMax: 4
   isClumping: 0.5
-  isImpassable: 1
+  isImpassable: 0
   sizeVariability: 0.5
