@@ -14,14 +14,21 @@ public class CharacterSelector : MonoBehaviour
     public GameObject characterSelectPanel;
     public GameObject playerSpecificStats;
 
+    public Character selectedCharacter;
+
     public void StartGame(int characterChoice)
     {
         characterSelectPanel.SetActive(false);
 
         //TODO activate stats panel.
-        playerSpecificStats.SetActive(true);
+        //playerSpecificStats.SetActive(true);
 
-        Character selectedCharacter = characters[characterChoice]; 
+        selectedCharacter = characters[characterChoice]; 
+
+
+        GameObject thePlayer = GameObject.Find("Warrior");
+        PlayerMouseMovement playerScript = thePlayer.GetComponent<PlayerMouseMovement>();
+        playerScript.heroType = characterChoice;
 
     }
 

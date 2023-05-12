@@ -2392,6 +2392,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23e41956547995d4c94f5bea23459ed7, type: 2}
   characterSelectPanel: {fileID: 1990536471}
   playerSpecificStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
 --- !u!1 &899930894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2802,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1307978642}
   impassable: {fileID: 189811098}
+  heroType: 0
+  warriorAnimator: {fileID: 22100000, guid: 0a66a52a5c0094c4fbe746997ce69f27, type: 2}
+  huntressAnimator: {fileID: 22100000, guid: 1c35d9660e1534d46b95483e798cb6f0, type: 2}
   playerCollider: {fileID: 1066576953}
 --- !u!114 &1066576955
 MonoBehaviour:
@@ -4701,6 +4705,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23e41956547995d4c94f5bea23459ed7, type: 2}
   characterSelectPanel: {fileID: 1990536471}
   playerSpecificStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
 --- !u!1001 &2052948570
 PrefabInstance:
   m_ObjectHideFlags: 0
