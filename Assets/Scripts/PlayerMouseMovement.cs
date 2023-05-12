@@ -22,11 +22,12 @@ public class PlayerMouseMovement : MonoBehaviour
     private bool catchingMoveData = false;
 
 
-    public AnimatorOverrideController warriorAnimator;
-    public AnimatorOverrideController huntressAnimator;
+    public AnimatorOverrideController warriorAnimator; //Player Selection animation.
+    public AnimatorOverrideController huntressAnimator; //Player Selection animation.
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
+    private Vector3 previousPosition; //Used for Walking Animations.
 
     public Collider2D playerCollider;
    
@@ -53,7 +54,7 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
-       
+       previousPosition= transform.position;
         
     }
 
@@ -78,12 +79,14 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
             {
+                // Walking animation to use pathing position.
+                animator.SetBool("isWalking", true);
+                animator.SetFloat("XInput", (transform.position.x-previousPosition.x));
+                animator.SetFloat("YInput", (transform.position.y-previousPosition.y));
+                previousPosition = transform.position;
+                
                 transform.position = plannedMove + shim;
 
-                //TODO: walking animation to use pathing position, not 'mousePos'.
-                animator.SetBool("isWalking", true);
-                animator.SetFloat("XInput", (mousePos.x - transform.position.x));
-                animator.SetFloat("YInput", (mousePos.y - transform.position.y));
             } else {
                 if (checkpoints.Count > 0)
                 {
