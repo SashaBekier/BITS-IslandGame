@@ -28,6 +28,7 @@ public class PlayerMouseMovement : MonoBehaviour
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
     private Vector3 previousPosition; //Used for Walking Animations.
+    private Queue<Vector3> positionHistory = new Queue<Vector3>();
 
     private Vector3 lastCheckpointPosition;
     private Vector3 nextCheckpointPosition;
@@ -87,8 +88,14 @@ public class PlayerMouseMovement : MonoBehaviour
                 animator.SetBool("isWalking", true);
                 animator.SetFloat("XInput", (transform.position.x-previousPosition.x));
                 animator.SetFloat("YInput", (transform.position.y-previousPosition.y));
-                previousPosition = transform.position;
-
+                positionHistory.Enqueue(transform.position);
+                if (positionHistory.Count > 40)
+                {
+                    previousPosition = positionHistory.Dequeue();
+                } else
+                {
+                    previousPosition = positionHistory.Peek();
+                }
                 
                 
                 transform.position = plannedMove + shim;
@@ -113,8 +120,8 @@ public class PlayerMouseMovement : MonoBehaviour
             
         } else
         {
-            gridPosition = ground.WorldToCell(transform.position - shim);
-            targetLocation = ground.CellToWorld(gridPosition) + shim;
+            //gridPosition = ground.WorldToCell(transform.position - shim);
+            //targetLocation = ground.CellToWorld(gridPosition) + shim;
         }
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -156,8 +163,8 @@ public class PlayerMouseMovement : MonoBehaviour
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
-                checkpoints.Enqueue(impassable.CellToWorld(nextCoords)+shim);
+                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                //checkpoints.Enqueue(impassable.CellToWorld(nextCoords)+shim);
             }
         }
         catchingMoveData = true;
@@ -167,7 +174,7 @@ public class PlayerMouseMovement : MonoBehaviour
     public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
     {
         Vector3 position = impassable.CellToWorld(cellPosition);
-        position += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        position += new Vector3(UnityEngine.Random.Range(-.20f, +.20f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
         return position;
     }
 
