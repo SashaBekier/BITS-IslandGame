@@ -34,15 +34,16 @@ public class initialiseMap : MonoBehaviour
 
     private int puzzleReference = 0;
     private int maxOceanWidth = 15;
-
+    public WorldScenery sceneryPrefab;
+    public Pickupable worldItemPrefab;
     public Item[] items;
     public Item_Edible[] edibles;
     public Item_PuzzlePiece[] puzzlePieces;
-    public Pickupable worldItemPrefab;
-    public Scenery[] plants;
-    public WorldScenery sceneryPrefab;
-    public Scenery[] puzzleReceivers;
 
+    public Scenery[] plants;
+
+    public Scenery[] puzzleReceivers;
+    public Scenery[] rocks;
 
 
 
@@ -70,11 +71,39 @@ public class initialiseMap : MonoBehaviour
 
         FixSingleTileIslands();
         SetOceanTones();
+        
+        SpawnPuzzlePieces();
 
         SpawnEdibles();
         SpawnPlants();
-        SpawnPuzzlePieces();
+        
+        SpawnRocks();
 
+    }
+
+    private void SpawnRocks()
+    {
+        for (int i = 0; i < 250; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Rocks");
+            Vector3Int gridPosition1 = getTargetTile();
+            int rockIndex = UnityEngine.Random.Range(0, rocks.Length);
+            
+            Vector3 rockPosition = terrainTilemap.CellToWorld(gridPosition1);
+            if (rocks[rockIndex].isImpassable)
+            {
+                impassableTilemap.SetTile(gridPosition1, collisionTile);
+            }
+
+            WorldScenery newScenery = Instantiate(sceneryPrefab, rockPosition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(rocks[rockIndex]);
+            float scaleMod = UnityEngine.Random.Range(1 - worldScenery.scenery.sizeVariability, 1 + worldScenery.scenery.sizeVariability);
+            worldScenery.transform.localScale = new Vector3(scaleMod, scaleMod);
+            setCoordsUnavailable(gridPosition1);
+
+
+        }
     }
 
     private void initialiseAvailableTiles()

@@ -2608,6 +2608,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a739191635281eb40b67988f9b599a41, type: 2}
   - {fileID: 11400000, guid: dae8a7633b070d44cb3732f8d478c2ff, type: 2}
   - {fileID: 11400000, guid: b2495d34db9168d4c9f13f26bf112aca, type: 2}
+  sceneryPrefab: {fileID: 578337422275027265, guid: 792ecf7f2e0ca1449b2b847492bb8455, type: 3}
+  worldItemPrefab: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
   items: []
   edibles:
   - {fileID: 11400000, guid: 3d67b112506b86b4a93966a1520f1fd3, type: 2}
@@ -2616,13 +2618,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d15aba739d9355439431186d95da6bc, type: 2}
   - {fileID: 11400000, guid: f30bc65cc8fc3214ca54970c834d0c84, type: 2}
   - {fileID: 11400000, guid: 0e1bb07e85962b44cae7e202c9f931ee, type: 2}
-  worldItemPrefab: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
   plants:
   - {fileID: 11400000, guid: 122073cdbc0168b4eb7e1cc6f93f06b0, type: 2}
   - {fileID: 11400000, guid: d2ea0abb5ddb0f6459c9cf0531e85bda, type: 2}
   - {fileID: 11400000, guid: e1cd0fe1e710465488bc0bc32bf3ec63, type: 2}
-  sceneryPrefab: {fileID: 578337422275027265, guid: 792ecf7f2e0ca1449b2b847492bb8455, type: 3}
   puzzleReceivers: []
+  rocks:
+  - {fileID: 11400000, guid: 4c3e60b23cb2bd74ea3ce60157638e5c, type: 2}
+  - {fileID: 11400000, guid: d92e9242677eb7d45bb3eddf2ab66f26, type: 2}
+  - {fileID: 11400000, guid: 336247f03e0d5904f80c3d755e42bd38, type: 2}
+  - {fileID: 11400000, guid: 2938ee060454ba44e84e0c626733066d, type: 2}
 --- !u!4 &959494598
 Transform:
   m_ObjectHideFlags: 0
