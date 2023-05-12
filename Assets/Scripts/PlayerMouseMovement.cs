@@ -18,9 +18,12 @@ public class PlayerMouseMovement : MonoBehaviour
     private float moveSpeed = 2.5f;
     private bool isPointerOverGameObject = true;
 
+    public int heroType = 0;
     private bool catchingMoveData = false;
 
 
+    public AnimatorOverrideController warriorAnimator;
+    public AnimatorOverrideController huntressAnimator;
 
     private Animator animator;
     private Vector3 shim = new Vector3(0f, .4f, 0f);
@@ -108,6 +111,16 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             isPointerOverGameObject = false;
         }
+
+
+        if (heroType == 0)
+        {
+            initialiseWarrior();
+        } else if (heroType == 1) 
+        {
+            initialiseHuntress();
+        }
+
     }
 
     public void enqueuePathToMousePosition(bool checkPointer)
@@ -142,5 +155,17 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector3 plantPosition = impassable.CellToWorld(cellPosition);
         plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
         return plantPosition;
+    }
+
+     private void initialiseWarrior()
+    {
+        heroType = 0;
+        GetComponent<Animator>().runtimeAnimatorController = warriorAnimator as RuntimeAnimatorController;
+    }
+
+    private void initialiseHuntress()
+    {
+        heroType = 1;
+        GetComponent<Animator>().runtimeAnimatorController = huntressAnimator as RuntimeAnimatorController;
     }
 }

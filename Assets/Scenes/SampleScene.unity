@@ -1800,8 +1800,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 11.5921}
-  m_SizeDelta: {x: 0, y: 23.1843}
+  m_AnchoredPosition: {x: 0, y: 15.025}
+  m_SizeDelta: {x: 0, y: 30.05}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734898553
 MonoBehaviour:
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -5.614746, z: 0, w: 0}
+  m_margin: {x: 0, y: -0.39935303, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1935,8 +1935,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 256, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15}
+  m_SizeDelta: {x: 256, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &746743754
 MonoBehaviour:
@@ -2021,7 +2021,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -0.11895752, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2392,6 +2392,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23e41956547995d4c94f5bea23459ed7, type: 2}
   characterSelectPanel: {fileID: 1990536471}
   playerSpecificStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
 --- !u!1 &899930894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2807,6 +2808,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1307978642}
   impassable: {fileID: 189811098}
+  heroType: 0
+  warriorAnimator: {fileID: 22100000, guid: 0a66a52a5c0094c4fbe746997ce69f27, type: 2}
+  huntressAnimator: {fileID: 22100000, guid: 1c35d9660e1534d46b95483e798cb6f0, type: 2}
   playerCollider: {fileID: 1066576953}
 --- !u!114 &1066576955
 MonoBehaviour:
@@ -4707,6 +4711,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23e41956547995d4c94f5bea23459ed7, type: 2}
   characterSelectPanel: {fileID: 1990536471}
   playerSpecificStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
 --- !u!1001 &2052948570
 PrefabInstance:
   m_ObjectHideFlags: 0
