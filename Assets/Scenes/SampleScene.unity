@@ -2592,6 +2592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae0236607d2bb84ca345f580a622e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1066576948}
   islandSize: 50
   fogTilemap: {fileID: 1179399956}
   impassableTilemap: {fileID: 189811098}
