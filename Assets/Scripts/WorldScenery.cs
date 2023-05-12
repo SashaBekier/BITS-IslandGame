@@ -34,7 +34,7 @@ public class WorldScenery : MonoBehaviour, IPointerClickHandler
         {
             Debug.Log("Left click caught");
             PlayerMouseMovement player = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>();
-            player.MouseClick(false);
+            player.enqueuePathToMousePosition(false);
         }
     }
 }

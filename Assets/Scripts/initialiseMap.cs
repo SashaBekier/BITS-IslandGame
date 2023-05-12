@@ -14,6 +14,8 @@ public class initialiseMap : MonoBehaviour
 {
     private PathFinder finder;
 
+    public GameObject player;
+
     public int islandSize = 50;
     
     public Tilemap fogTilemap;
@@ -64,6 +66,8 @@ public class initialiseMap : MonoBehaviour
 */
         initialiseAvailableTiles();
 
+        PlacePlayer();
+
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
         PlaceFixedGroupTiles();
@@ -79,6 +83,14 @@ public class initialiseMap : MonoBehaviour
         
         SpawnRocks();
 
+    }
+
+    private void PlacePlayer()
+    {
+        Vector3Int gridPosition1 = getTargetTile();
+        Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
+        player.transform.position = worldPos;
+        setCoordsUnavailable(gridPosition1);
     }
 
     private void SpawnRocks()

@@ -18,6 +18,8 @@ public class PlayerMouseMovement : MonoBehaviour
     private float moveSpeed = 2.5f;
     private bool isPointerOverGameObject = true;
 
+    private bool catchingMoveData = false;
+
 
 
     private Animator animator;
@@ -46,15 +48,24 @@ public class PlayerMouseMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mouseInput.Mouse.MouseClick.performed += _ => MouseClick(true);
+        mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
-
+       
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(catchingMoveData)
+        {
+            if (mouseInput.Mouse.MouseClick.IsPressed())
+            {
+                enqueuePathToMousePosition(true);
+            } else {
+                catchingMoveData=false;
+            }
+        }
         Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -99,7 +110,7 @@ public class PlayerMouseMovement : MonoBehaviour
         }
     }
 
-    public void MouseClick(bool checkPointer)
+    public void enqueuePathToMousePosition(bool checkPointer)
     {
         if(isPointerOverGameObject && checkPointer)
         {
@@ -108,7 +119,8 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector2 mousePosition = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
-        if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition))
+
+        if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition) )
         {
             Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
@@ -121,6 +133,7 @@ public class PlayerMouseMovement : MonoBehaviour
                 checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
             }
         }
+        catchingMoveData = true;
 
     }
 
