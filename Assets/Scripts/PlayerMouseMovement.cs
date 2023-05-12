@@ -29,6 +29,9 @@ public class PlayerMouseMovement : MonoBehaviour
     private Vector3 shim = new Vector3(0f, .4f, 0f);
     private Vector3 previousPosition; //Used for Walking Animations.
 
+    private Vector3 lastCheckpointPosition;
+    private Vector3 nextCheckpointPosition;
+
     public Collider2D playerCollider;
    
 
@@ -54,8 +57,9 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
-       previousPosition= transform.position;
-        
+        previousPosition= transform.position;
+        lastCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
+
     }
 
     // Update is called once per frame
@@ -84,13 +88,18 @@ public class PlayerMouseMovement : MonoBehaviour
                 animator.SetFloat("XInput", (transform.position.x-previousPosition.x));
                 animator.SetFloat("YInput", (transform.position.y-previousPosition.y));
                 previousPosition = transform.position;
+
+                
                 
                 transform.position = plannedMove + shim;
 
             } else {
                 if (checkpoints.Count > 0)
                 {
+                    lastCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
                     targetLocation = checkpoints.Dequeue();
+                    nextCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
+                    
                 }
                 else
                 {
@@ -141,6 +150,7 @@ public class PlayerMouseMovement : MonoBehaviour
             Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
             checkpoints.Clear();
+            lastCheckpointPosition = ground.CellToWorld(playerCell);
             
             while (pathFound.Count > 0)
             {
@@ -156,9 +166,9 @@ public class PlayerMouseMovement : MonoBehaviour
 
     public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
     {
-        Vector3 plantPosition = impassable.CellToWorld(cellPosition);
-        plantPosition += new Vector3(UnityEngine.Random.Range(-.1f, +.1f), UnityEngine.Random.Range(-.1f + yOffset, +.1f + yOffset), 0);
-        return plantPosition;
+        Vector3 position = impassable.CellToWorld(cellPosition);
+        position += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        return position;
     }
 
      private void initialiseWarrior()
