@@ -51,7 +51,7 @@ public class initialiseMap : MonoBehaviour
 
 
 
-    private Vector3 playerShim = new Vector3(0f, .4f, 0f);
+    private Vector3 playerShim = new Vector3(0f, .0f, 0f);
 
 
 
