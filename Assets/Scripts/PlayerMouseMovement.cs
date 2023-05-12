@@ -146,7 +146,8 @@ public class PlayerMouseMovement : MonoBehaviour
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                checkpoints.Enqueue(impassable.CellToWorld(nextCoords)+shim);
             }
         }
         catchingMoveData = true;
@@ -156,7 +157,7 @@ public class PlayerMouseMovement : MonoBehaviour
     public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
     {
         Vector3 plantPosition = impassable.CellToWorld(cellPosition);
-        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        plantPosition += new Vector3(UnityEngine.Random.Range(-.1f, +.1f), UnityEngine.Random.Range(-.1f + yOffset, +.1f + yOffset), 0);
         return plantPosition;
     }
 
