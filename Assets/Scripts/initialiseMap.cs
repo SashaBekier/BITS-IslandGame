@@ -99,7 +99,7 @@ public class initialiseMap : MonoBehaviour
         do {
             gridPosition1 = getTargetTile();
             Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
-            player.transform.position = worldPos - playerShim;
+            player.transform.position = worldPos + playerShim;
         } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
         setCoordsUnavailable(gridPosition1);
     }
