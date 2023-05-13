@@ -49,12 +49,6 @@ public class initialiseMap : MonoBehaviour
     public Scenery[] rocks;
 
 
-
-
-    private Vector3 playerShim = new Vector3(0f, .4f, 0f);
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -99,7 +93,7 @@ public class initialiseMap : MonoBehaviour
         do {
             gridPosition1 = getTargetTile();
             Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
-            player.transform.position = worldPos + playerShim;
+            player.transform.position = worldPos;
         } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
         setCoordsUnavailable(gridPosition1);
     }
@@ -205,7 +199,7 @@ public class initialiseMap : MonoBehaviour
 
     private bool accessibleToPlayer(Vector3Int coords)
     {
-        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position - playerShim );
+        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position);
         Dictionary<Vector3Int, int>  steps = finder.GenerateStepCount(playerPosition);
         return steps.ContainsKey(coords);
     }
