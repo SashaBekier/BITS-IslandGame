@@ -500,7 +500,7 @@ public class initialiseMap : MonoBehaviour
 
     }
 
-    private void SpawnEnemies()
+    /*private void SpawnEnemies()
     {
         for (int i = 0; i < 5; i++)
         {
@@ -520,7 +520,25 @@ public class initialiseMap : MonoBehaviour
 
             setCoordsUnavailable(gridPosition1);
         }
-    }
+    }*/
 
+    private void SpawnEnemies()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3Int gridPosition = getTargetTile();
+            Vector3 enemyPosition = terrainTilemap.CellToWorld(gridPosition);
+
+            Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
+            Fightable enemyPlacement = newEnemy.GetComponent<Fightable>();
+            enemyPlacement.Initialise(enemies[i]);
+
+            // Offset the enemy sprite position
+            Vector3 spriteOffset = new Vector3(0, 0.3f, 0); // Adjust the Y offset as needed
+            enemyPlacement.transform.position += spriteOffset;
+
+            setCoordsUnavailable(gridPosition);
+        }
+    }
 
 }

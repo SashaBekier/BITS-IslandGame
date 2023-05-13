@@ -8,7 +8,7 @@ using static UnityEditor.Progress;
 public class Enemy : ScriptableObject
 {
 
-    public Enemy enemy;
+    
     //Using as a data containter
     public string enemyName = "default";
     public int startingHP = 100; // TODO this is a placeholder, put player stats class here instead
