@@ -17,6 +17,8 @@ public class initialiseMap : MonoBehaviour
 
     public GameObject player;
 
+    public Fightable enemyPrefab;
+
     public int islandSize = 50;
     
     public Tilemap fogTilemap;
@@ -47,6 +49,8 @@ public class initialiseMap : MonoBehaviour
 
     public Scenery[] puzzleReceivers;
     public Scenery[] rocks;
+
+    public Enemy[] enemies;
 
 
     // Start is called before the first frame update
@@ -80,9 +84,10 @@ public class initialiseMap : MonoBehaviour
 
         SpawnEdibles();
         SpawnPlants();
-        
+
         SpawnRocks();
         PlacePlayer();
+        SpawnEnemies();
         SpawnPuzzlePieces();
 
     }
@@ -495,7 +500,27 @@ public class initialiseMap : MonoBehaviour
 
     }
 
+    private void SpawnEnemies()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Enemy");
+            Vector3Int gridPosition1;
+            
+            do
+            {
+                gridPosition1 = getTargetTile();
 
+            } while (!accessibleToPlayer(gridPosition1));
+            Vector3 enemyPosition1 = terrainTilemap.CellToWorld(gridPosition1);
+
+            Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition1, Quaternion.identity);
+            Fightable enemyPlacement = newEnemy.GetComponent<Fightable>();
+            enemyPlacement.Initialise(enemies[i]);
+
+            setCoordsUnavailable(gridPosition1);
+        }
+    }
 
 
 }
