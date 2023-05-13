@@ -26,12 +26,9 @@ public class PlayerMouseMovement : MonoBehaviour
     public AnimatorOverrideController huntressAnimator; //Player Selection animation.
 
     private Animator animator;
-    private Vector3 shim = new Vector3(0f, .0f, 0f);
     private Vector3 previousPosition; //Used for Walking Animations.
 
-    private Vector3 lastCheckpointPosition;
-    private Vector3 nextCheckpointPosition;
-
+    
     public Collider2D playerCollider;
    
 
@@ -58,8 +55,7 @@ public class PlayerMouseMovement : MonoBehaviour
         mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
         previousPosition= transform.position;
-        lastCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
-
+        
     }
 
     // Update is called once per frame
@@ -74,7 +70,7 @@ public class PlayerMouseMovement : MonoBehaviour
                 catchingMoveData=false;
             }
         }
-        Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
+        Vector3 plannedMove = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -91,14 +87,12 @@ public class PlayerMouseMovement : MonoBehaviour
 
                 
                 
-                transform.position = plannedMove + shim;
+                transform.position = plannedMove;
 
             } else {
                 if (checkpoints.Count > 0)
                 {
-                    lastCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
                     targetLocation = checkpoints.Dequeue();
-                    nextCheckpointPosition = ground.CellToWorld(ground.WorldToCell(targetLocation));
                     
                 }
                 else
@@ -113,8 +107,8 @@ public class PlayerMouseMovement : MonoBehaviour
             
         } else
         {
-            gridPosition = ground.WorldToCell(transform.position - shim);
-            targetLocation = ground.CellToWorld(gridPosition) + shim;
+            gridPosition = ground.WorldToCell(transform.position);
+            targetLocation = ground.CellToWorld(gridPosition);
         }
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -147,17 +141,16 @@ public class PlayerMouseMovement : MonoBehaviour
 
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition) )
         {
-            Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
+            Vector3Int playerCell = ground.WorldToCell(transform.position);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
             checkpoints.Clear();
-            lastCheckpointPosition = ground.CellToWorld(playerCell);
             
             while (pathFound.Count > 0)
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
                 //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
-                checkpoints.Enqueue(impassable.CellToWorld(nextCoords)+shim);
+                checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
             }
         }
         catchingMoveData = true;
