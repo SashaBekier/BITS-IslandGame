@@ -20,13 +20,14 @@ public class PlayerMouseMovement : MonoBehaviour
 
     public int heroType = 0;
     private bool catchingMoveData = false;
-
+    private bool heroInitialised = false;
 
     public AnimatorOverrideController warriorAnimator; //Player Selection animation.
     public AnimatorOverrideController huntressAnimator; //Player Selection animation.
 
     private Animator animator;
     private Vector3 previousPosition; //Used for Walking Animations.
+    private Vector3 lastWomble = new Vector3(0,0,0);
 
     
     public Collider2D playerCollider;
@@ -55,6 +56,7 @@ public class PlayerMouseMovement : MonoBehaviour
         mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
         previousPosition= transform.position;
+       
         
     }
 
@@ -108,7 +110,7 @@ public class PlayerMouseMovement : MonoBehaviour
         } else
         {
             gridPosition = ground.WorldToCell(transform.position);
-            targetLocation = ground.CellToWorld(gridPosition);
+            //targetLocation = ground.CellToWorld(gridPosition);
         }
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -118,14 +120,14 @@ public class PlayerMouseMovement : MonoBehaviour
             isPointerOverGameObject = false;
         }
 
-
         if (heroType == 0)
-        {
-            initialiseWarrior();
-        } else if (heroType == 1) 
-        {
-            initialiseHuntress();
-        }
+            {
+                initialiseWarrior();
+            }
+            else if (heroType == 1)
+            {
+                initialiseHuntress();
+            }
 
     }
 
@@ -149,22 +151,34 @@ public class PlayerMouseMovement : MonoBehaviour
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
-                checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
+                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords));
+                //checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
             }
         }
         catchingMoveData = true;
 
     }
 
-    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
+    public Vector3 offsetPositionWithinCell(Vector3Int cellPosition)
     {
+        float maximaMinima = .15f;
+        float singleShift = .03f;
+        float minX, maxX, minY, maxY;
+        minX = Mathf.Max(-maximaMinima, Random.Range(lastWomble.x - singleShift, lastWomble.x + singleShift));
+        maxX = Mathf.Min(maximaMinima, Random.Range(lastWomble.x - singleShift, lastWomble.x + singleShift));
+        minY = Mathf.Max(-maximaMinima, Random.Range(lastWomble.y - singleShift, lastWomble.y + singleShift));
+        maxY = Mathf.Min(maximaMinima , Random.Range(lastWomble.y - singleShift, lastWomble.y + singleShift));
+        Debug.Log(minY + " " + maxY);
+        Vector3 newWomble = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         Vector3 position = impassable.CellToWorld(cellPosition);
-        position += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+
+        position += newWomble;
+        lastWomble = newWomble;
+
         return position;
     }
 
-     private void initialiseWarrior()
+    private void initialiseWarrior()
     {
         heroType = 0;
         GetComponent<Animator>().runtimeAnimatorController = warriorAnimator as RuntimeAnimatorController;
