@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class EquipItem : InventoryItem
 {
 
 
     public Item_Equipable equipableItem;
+    
     
 
     // Start is called before the first frame update
@@ -31,14 +33,7 @@ public class EquipItem : InventoryItem
     {
         item = newEquip;
         equipableItem = newEquip;
-        Debug.Log("Item received at initialise " + item + " with image " + item.sprite);
-        Sprite sprite = item.sprite;
-        Debug.Log(sprite + " is the setting for sprite");
-
-        //this line demonstrates that for reasons unknown image.sprite doesn't exist here even though
-        //it works fine in InventoryItem and this extends InventoryItem without making any adjustments to the image variable
-        Debug.Log(image.sprite + "is the image.sprite before intitialise");
-        //image.sprite = sprite;
+        image.sprite = item.sprite;
         //RefreshCount();
     }
 

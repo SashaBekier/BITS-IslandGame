@@ -37,7 +37,7 @@ public class EquipManager : InventoryManager
     }
     public bool don(Item_Equipable itemToDon)
     {
-        Debug.Log("Donning " + itemToDon);
+        Debug.Log("Donning " + itemToDon + "Player Strength = " + player.StrengthTotal);
         int slotIndex = (int)itemToDon.equipSlotRequired;
         if (doff(slotIndex))
         {
@@ -45,6 +45,7 @@ public class EquipManager : InventoryManager
             foreach (Modifier modifier in itemToDon.modifiers)
             {
                 player.modifiers.Add(modifier);
+                Debug.Log("Donned " + itemToDon + "Player Strength = " + player.StrengthTotal);
             }
             return true;
         } else
@@ -63,8 +64,9 @@ public class EquipManager : InventoryManager
 
     public bool doff(int slotIndex)
     {
+        Debug.Log("Doffing slot " + (EquipSlotNames)slotIndex + "Player Strength = " + player.StrengthTotal);
         bool slotClear = false;
-        EquipItem itemToDoff = inventorySlots[slotIndex].GetComponentInChildren<EquipItem>(); 
+        EquipItem itemToDoff = inventorySlots[slotIndex].GetComponentInChildren<EquipItem>();
         if (itemToDoff == null)
         {
             slotClear = true;
@@ -76,6 +78,7 @@ public class EquipManager : InventoryManager
                 {
                     player.modifiers.Remove(modifier);
                 }
+                Debug.Log("Doffed " + itemToDoff + "Player Strength = " + player.StrengthTotal);
                 Destroy(itemToDoff);
                 slotClear = true;
             }
