@@ -6,9 +6,11 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
 
-    public Sprite image;
+    public Sprite sprite;
 
     public int maxStack = 10;
+
+    public bool isEquipable = false;
 
      public virtual void RightClick()
     {
