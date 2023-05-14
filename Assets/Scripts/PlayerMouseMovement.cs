@@ -17,7 +17,8 @@ public class PlayerMouseMovement : MonoBehaviour
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
     private bool isPointerOverGameObject = true;
-
+    
+    public bool setHeroType = false;
     public int heroType = 0;
     private bool catchingMoveData = false;
 
@@ -118,13 +119,17 @@ public class PlayerMouseMovement : MonoBehaviour
             isPointerOverGameObject = false;
         }
 
-
-        if (heroType == 0)
+        if (setHeroType)
         {
-            initialiseWarrior();
-        } else if (heroType == 1) 
-        {
-            initialiseHuntress();
+            if (heroType == 0)
+            {
+                initialiseWarrior();
+            }
+            else if (heroType == 1)
+            {
+                initialiseHuntress();
+            }
+            setHeroType = false;
         }
 
     }

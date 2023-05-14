@@ -3036,6 +3036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1307978642}
   impassable: {fileID: 189811098}
+  setHeroType: 0
   heroType: 0
   warriorAnimator: {fileID: 22100000, guid: 0a66a52a5c0094c4fbe746997ce69f27, type: 2}
   huntressAnimator: {fileID: 22100000, guid: 1c35d9660e1534d46b95483e798cb6f0, type: 2}
