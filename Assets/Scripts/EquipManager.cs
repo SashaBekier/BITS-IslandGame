@@ -72,8 +72,7 @@ public class EquipManager : InventoryManager
             slotClear = true;
         } else
         {
-            if (InventoryManager.instance.AddItem(itemToDoff.item))
-            {
+            
                 foreach (Modifier modifier in (itemToDoff.equipableItem.modifiers))
                 {
                     player.modifiers.Remove(modifier);
@@ -81,7 +80,7 @@ public class EquipManager : InventoryManager
                 Debug.Log("Doffed " + itemToDoff + "Player Strength = " + player.StrengthTotal);
                 Destroy(itemToDoff.gameObject);
                 slotClear = true;
-            }
+            
         }
         return slotClear;
     }
