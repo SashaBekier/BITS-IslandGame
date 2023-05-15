@@ -3620,6 +3620,8 @@ MonoBehaviour:
   Strength: 5
   Intelligence: 5
   Dexterity: 5
+  healthBar: {fileID: 1991730488}
+  magicBar: {fileID: 318919556}
   currentHealth: 0
   currentMagic: 0
 --- !u!1 &1093257110

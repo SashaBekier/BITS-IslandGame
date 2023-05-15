@@ -7,6 +7,9 @@ public class PlayerStats : MonoBehaviour
     public int Intelligence;
     public int Dexterity;
 
+    public HealthBar healthBar;
+    public MagicBar magicBar;
+
     
 
     [HideInInspector]
@@ -55,6 +58,7 @@ public class PlayerStats : MonoBehaviour
         {
             Debug.Log(amount*-1 + "Health Lost");
         }
+        healthBar.UpdateHealthBar();
     }
 
 
@@ -75,8 +79,10 @@ public class PlayerStats : MonoBehaviour
             return false;
         } else
         {
+            magicBar.UpdateMagicBar();
             return true;
         }
+         
     }
 
     public int HealthTotal

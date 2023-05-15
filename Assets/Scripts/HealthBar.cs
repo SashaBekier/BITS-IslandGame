@@ -14,6 +14,7 @@ public class HealthBar : MonoBehaviour
         maxHealth = warrior.GetComponent<PlayerStats>().HealthTotal; // Get the maximum health from the PlayerStats script attached to the Warrior object
     }
 
+
     // Call this method to update the health bar
     public void UpdateHealthBar()
     {
