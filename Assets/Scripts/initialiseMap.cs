@@ -46,8 +46,7 @@ public class initialiseMap : MonoBehaviour
     public Item_PuzzlePiece[] puzzlePieces;
 
     public Scenery[] plants;
-    public Scenery altar;
-    public Scenery[] puzzleReceivers;
+    public Scenery_Puzzle altar;
     public Scenery[] rocks;
 
     public Enemy[] enemies;
@@ -242,7 +241,9 @@ public class initialiseMap : MonoBehaviour
             worldScenery.Initialise(altar);
             setCoordsUnavailable(gridPosition1);
             impassableTilemap.SetTile(gridPosition1, collisionTile); 
+            
         }
+        
     }
 
     private void SpawnPlant(Vector3Int gridPosition1, int plantIndex, bool shiftToNeighbour)
