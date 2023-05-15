@@ -46,7 +46,7 @@ public class initialiseMap : MonoBehaviour
     public Item_PuzzlePiece[] puzzlePieces;
 
     public Scenery[] plants;
-
+    public Scenery altar;
     public Scenery[] puzzleReceivers;
     public Scenery[] rocks;
 
@@ -227,6 +227,21 @@ public class initialiseMap : MonoBehaviour
                 } while (UnityEngine.Random.Range(0f, 1f) < plants[plantIndex].isClumping);
             }
 
+        }
+    }
+
+    private void SpawnAltars()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Altars");
+            Vector3Int gridPosition1 = getTargetTile();
+            Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
+            WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(altar);
+            setCoordsUnavailable(gridPosition1);
+            impassableTilemap.SetTile(gridPosition1, collisionTile); 
         }
     }
 
