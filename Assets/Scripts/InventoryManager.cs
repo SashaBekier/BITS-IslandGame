@@ -26,6 +26,7 @@ public class InventoryManager : MonoBehaviour
     }
     public bool AddItem(Item item)
     {
+        Debug.Log("Add Item called with " + item);
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];

@@ -14,13 +14,13 @@ public class Pickupable : MonoBehaviour, IPointerClickHandler
 
     public void Start()
     {
-        spriteRenderer.sprite = item.image;   
+        spriteRenderer.sprite = item.sprite;   
     }
 
     public void Initialise(Item item)
     {
         this.item = item;
-        spriteRenderer.sprite = item.image;
+        spriteRenderer.sprite = item.sprite;
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
