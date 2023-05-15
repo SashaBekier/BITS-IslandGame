@@ -89,6 +89,7 @@ public class initialiseMap : MonoBehaviour
         PlacePlayer();
         SpawnEnemies();
         SpawnPuzzlePieces();
+        SpawnAltars();
 
     }
 
