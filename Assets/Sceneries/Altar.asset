@@ -17,3 +17,8 @@ MonoBehaviour:
   spriteDensityMax: 1
   isClumping: 0
   isImpassable: 1
+  sizeVariability: 0
+  puzzlePieces:
+  - {fileID: 11400000, guid: 2d15aba739d9355439431186d95da6bc, type: 2}
+  - {fileID: 11400000, guid: f30bc65cc8fc3214ca54970c834d0c84, type: 2}
+  - {fileID: 11400000, guid: 0e1bb07e85962b44cae7e202c9f931ee, type: 2}

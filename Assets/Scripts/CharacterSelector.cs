@@ -29,6 +29,7 @@ public class CharacterSelector : MonoBehaviour
         GameObject thePlayer = GameObject.Find("Warrior");
         PlayerMouseMovement playerScript = thePlayer.GetComponent<PlayerMouseMovement>();
         playerScript.heroType = characterChoice;
+        playerScript.setHeroType = true;
 
     }
 

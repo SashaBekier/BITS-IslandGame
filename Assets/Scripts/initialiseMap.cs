@@ -17,6 +17,8 @@ public class initialiseMap : MonoBehaviour
 
     public GameObject player;
 
+    public Fightable enemyPrefab;
+
     public int islandSize = 50;
     
     public Tilemap fogTilemap;
@@ -44,15 +46,11 @@ public class initialiseMap : MonoBehaviour
     public Item_PuzzlePiece[] puzzlePieces;
 
     public Scenery[] plants;
-
+    public Scenery altar;
     public Scenery[] puzzleReceivers;
     public Scenery[] rocks;
 
-
-
-
-    private Vector3 playerShim = new Vector3(0f, .4f, 0f);
-
+    public Enemy[] enemies;
 
 
     // Start is called before the first frame update
@@ -86,10 +84,12 @@ public class initialiseMap : MonoBehaviour
 
         SpawnEdibles();
         SpawnPlants();
-        
+
         SpawnRocks();
         PlacePlayer();
+        SpawnEnemies();
         SpawnPuzzlePieces();
+        SpawnAltars();
 
     }
 
@@ -99,7 +99,7 @@ public class initialiseMap : MonoBehaviour
         do {
             gridPosition1 = getTargetTile();
             Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
-            player.transform.position = worldPos + playerShim;
+            player.transform.position = worldPos;
         } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
         setCoordsUnavailable(gridPosition1);
     }
@@ -108,7 +108,7 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 250; i++)
         {
-            UnityEngine.Debug.Log("Spawning Rocks");
+            //UnityEngine.Debug.Log("Spawning Rocks");
             Vector3Int gridPosition1 = getTargetTile();
             int rockIndex = UnityEngine.Random.Range(0, rocks.Length);
             
@@ -205,7 +205,7 @@ public class initialiseMap : MonoBehaviour
 
     private bool accessibleToPlayer(Vector3Int coords)
     {
-        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position - playerShim );
+        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position);
         Dictionary<Vector3Int, int>  steps = finder.GenerateStepCount(playerPosition);
         return steps.ContainsKey(coords);
     }
@@ -214,7 +214,7 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 30; i++)
         {
-            UnityEngine.Debug.Log("Spawning Plants");
+            //UnityEngine.Debug.Log("Spawning Plants");
             Vector3Int gridPosition1 = getTargetTile();
             int plantIndex = UnityEngine.Random.Range(0, plants.Length);
             int plantDensity = UnityEngine.Random.Range(plants[plantIndex].spriteDensityMin, plants[plantIndex].spriteDensityMax+1);
@@ -228,6 +228,26 @@ public class initialiseMap : MonoBehaviour
                 } while (UnityEngine.Random.Range(0f, 1f) < plants[plantIndex].isClumping);
             }
 
+        }
+    }
+
+    private void SpawnAltars()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3Int gridPosition1;
+            UnityEngine.Debug.Log("Spawning Altars");
+            do
+            {
+                gridPosition1 = getTargetTile();
+
+            } while (!accessibleToPlayer(gridPosition1));
+            Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
+            WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
+            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+            worldScenery.Initialise(altar);
+            setCoordsUnavailable(gridPosition1);
+            impassableTilemap.SetTile(gridPosition1, collisionTile); 
         }
     }
 
@@ -289,7 +309,7 @@ public class initialiseMap : MonoBehaviour
             for (int ycoord = 0; ycoord <= islandSize; ycoord++)
             {
                 Vector3Int coords = new Vector3Int(xcoord, ycoord);
-                Debug.Log(coords + " " +terrainTilemap.GetTile(coords).ToString());
+                //Debug.Log(coords + " " +terrainTilemap.GetTile(coords).ToString());
                 if (!terrainTilemap.GetTile(coords).ToString().Equals("ocean_tile"))
                 {
                     
@@ -501,7 +521,45 @@ public class initialiseMap : MonoBehaviour
 
     }
 
+    /*private void SpawnEnemies()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            UnityEngine.Debug.Log("Spawning Enemy");
+            Vector3Int gridPosition1;
+            
+            do
+            {
+                gridPosition1 = getTargetTile();
 
+            } while (!accessibleToPlayer(gridPosition1));
+            Vector3 enemyPosition1 = terrainTilemap.CellToWorld(gridPosition1);
 
+            Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition1, Quaternion.identity);
+            Fightable enemyPlacement = newEnemy.GetComponent<Fightable>();
+            enemyPlacement.Initialise(enemies[i]);
+
+            setCoordsUnavailable(gridPosition1);
+        }
+    }*/
+
+    private void SpawnEnemies()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3Int gridPosition = getTargetTile();
+            Vector3 enemyPosition = terrainTilemap.CellToWorld(gridPosition);
+
+            Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
+            Fightable enemyPlacement = newEnemy.GetComponent<Fightable>();
+            enemyPlacement.Initialise(enemies[i]);
+
+            // Offset the enemy sprite position
+            Vector3 spriteOffset = new Vector3(0, 0f, 0); // Adjust the Y offset as needed
+            enemyPlacement.transform.position += spriteOffset;
+
+            setCoordsUnavailable(gridPosition);
+        }
+    }
 
 }

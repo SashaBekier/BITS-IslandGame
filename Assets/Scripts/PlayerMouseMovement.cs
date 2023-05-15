@@ -17,17 +17,19 @@ public class PlayerMouseMovement : MonoBehaviour
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
     private float moveSpeed = 2.5f;
     private bool isPointerOverGameObject = true;
-
+    
+    public bool setHeroType = false;
     public int heroType = 0;
     private bool catchingMoveData = false;
 
 
-    public AnimatorOverrideController warriorAnimator;
-    public AnimatorOverrideController huntressAnimator;
+    public AnimatorOverrideController warriorAnimator; //Player Selection animation.
+    public AnimatorOverrideController huntressAnimator; //Player Selection animation.
 
     private Animator animator;
-    private Vector3 shim = new Vector3(0f, .4f, 0f);
+    private Vector3 previousPosition; //Used for Walking Animations.
 
+    
     public Collider2D playerCollider;
    
 
@@ -53,7 +55,7 @@ public class PlayerMouseMovement : MonoBehaviour
     {
         mouseInput.Mouse.MouseClick.performed += _ => enqueuePathToMousePosition(true);
         targetLocation = transform.position;
-       
+        previousPosition= transform.position;
         
     }
 
@@ -69,7 +71,7 @@ public class PlayerMouseMovement : MonoBehaviour
                 catchingMoveData=false;
             }
         }
-        Vector3 plannedMove = Vector3.MoveTowards(transform.position - shim, targetLocation -shim, moveSpeed * Time.deltaTime) ;
+        Vector3 plannedMove = Vector3.MoveTowards(transform.position, targetLocation, moveSpeed * Time.deltaTime) ;
         Vector3Int gridPosition = ground.WorldToCell(plannedMove);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -78,16 +80,21 @@ public class PlayerMouseMovement : MonoBehaviour
         {
             if(Vector3.Distance(transform.position, targetLocation) > 0.1f)
             {
-                transform.position = plannedMove + shim;
-
-                //TODO: walking animation to use pathing position, not 'mousePos'.
+                // Walking animation to use pathing position.
                 animator.SetBool("isWalking", true);
-                animator.SetFloat("XInput", (mousePos.x - transform.position.x));
-                animator.SetFloat("YInput", (mousePos.y - transform.position.y));
+                animator.SetFloat("XInput", (transform.position.x-previousPosition.x));
+                animator.SetFloat("YInput", (transform.position.y-previousPosition.y));
+                previousPosition = transform.position;
+
+                
+                
+                transform.position = plannedMove;
+
             } else {
                 if (checkpoints.Count > 0)
                 {
                     targetLocation = checkpoints.Dequeue();
+                    
                 }
                 else
                 {
@@ -101,8 +108,8 @@ public class PlayerMouseMovement : MonoBehaviour
             
         } else
         {
-            gridPosition = ground.WorldToCell(transform.position - shim);
-            targetLocation = ground.CellToWorld(gridPosition) + shim;
+            gridPosition = ground.WorldToCell(transform.position);
+            targetLocation = ground.CellToWorld(gridPosition);
         }
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -112,13 +119,17 @@ public class PlayerMouseMovement : MonoBehaviour
             isPointerOverGameObject = false;
         }
 
-
-        if (heroType == 0)
+        if (setHeroType)
         {
-            initialiseWarrior();
-        } else if (heroType == 1) 
-        {
-            initialiseHuntress();
+            if (heroType == 0)
+            {
+                initialiseWarrior();
+            }
+            else if (heroType == 1)
+            {
+                initialiseHuntress();
+            }
+            setHeroType = false;
         }
 
     }
@@ -135,15 +146,16 @@ public class PlayerMouseMovement : MonoBehaviour
 
         if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition) )
         {
-            Vector3Int playerCell = ground.WorldToCell(transform.position - shim);
+            Vector3Int playerCell = ground.WorldToCell(transform.position);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
             checkpoints.Clear();
             
             while (pathFound.Count > 0)
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
-                Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                //Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
+                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
             }
         }
         catchingMoveData = true;
@@ -152,9 +164,9 @@ public class PlayerMouseMovement : MonoBehaviour
 
     public Vector3 offsetPositionWithinCell(Vector3Int cellPosition, float yOffset)
     {
-        Vector3 plantPosition = impassable.CellToWorld(cellPosition);
-        plantPosition += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
-        return plantPosition;
+        Vector3 position = impassable.CellToWorld(cellPosition);
+        position += new Vector3(UnityEngine.Random.Range(-.25f, +.25f), UnityEngine.Random.Range(-.2f + yOffset, +.2f + yOffset), 0);
+        return position;
     }
 
      private void initialiseWarrior()

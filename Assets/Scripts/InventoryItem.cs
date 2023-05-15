@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,10 +30,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
-        image.sprite = newItem.image;
+        image.sprite = newItem.sprite;
+        Debug.Log(image.sprite + "is the image.sprite in Inventory Item");
         RefreshCount();
     }
-
+    public override String ToString()
+    {
+        return (item.name + " " + item.sprite);
+    }
     public void DestroyItem()
     {
         Destroy(this);
@@ -70,11 +75,22 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parent);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right) {
             Debug.Log("Right Click caught");
-            item.RightClick();
+            if(item.isEquipable) {
+                if (EquipManager.equipManager.don((Item_Equipable)item))
+                {
+                    InventoryManager.instance.DestroyItem(item);
+                }
+
+            } else
+            {
+                item.RightClick();
+
+            }
+
         }
     }
 

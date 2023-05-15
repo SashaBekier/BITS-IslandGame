@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
-    public void OnDrop(PointerEventData eventData)
+    public virtual void OnDrop(PointerEventData eventData)
     {
         InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
         if (transform.childCount == 0)

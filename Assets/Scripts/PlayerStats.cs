@@ -212,20 +212,11 @@ public class PlayerStats : MonoBehaviour
     {
         currentHealth = HealthTotal;
         currentMagic = MagicTotal;
-        Modifier myModifier = new Modifier("Attack", 20);
+        Modifier myModifier = (Modifier)ScriptableObject.CreateInstance("Modifier");
+        myModifier.initialise("Strength", 20);
         modifiers.Add(myModifier);
         Debug.Log("Total Attack: " + AttackTotal);
     }
 
-    public class Modifier
-    {
-        public int magnitude;
-        public string modType;
 
-        public Modifier(string modType, int magnitude)
-        {
-            this.modType = modType;
-            this.magnitude = magnitude;
-        }
-    }
 }
