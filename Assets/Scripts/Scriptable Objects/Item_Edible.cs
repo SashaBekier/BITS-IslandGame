@@ -7,6 +7,7 @@ public class Item_Edible : Item
 {
     public int healthChange;
     public int magicChange;
+     
     
 
     // Start is called before the first frame update
@@ -23,10 +24,10 @@ public class Item_Edible : Item
 
     public override void RightClick()
     {
-        Debug.Log("Item_Edible Right Click Called");
         PlayerStats player = GameObject.Find("Warrior").GetComponent<PlayerStats>();
-        player.adjustCurrentHealth(healthChange);
-        player.adjustCurrentMagic(magicChange);
+        Debug.Log("Item_Edible Right Click Called");
+        if (healthChange != 0) { player.adjustCurrentHealth(healthChange); }
+        if (magicChange != 0) { player.drainCurrentMagic(magicChange); }
 
         Item thisItem = this;
         InventoryManager.instance.DestroyItem(thisItem);

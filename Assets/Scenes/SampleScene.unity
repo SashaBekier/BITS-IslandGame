@@ -3885,6 +3885,7 @@ MonoBehaviour:
   Strength: 5
   Intelligence: 5
   Dexterity: 5
+  Level: 1
   modifiers: []
   currentHealth: 0
   currentMagic: 0

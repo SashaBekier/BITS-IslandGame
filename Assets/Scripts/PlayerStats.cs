@@ -6,17 +6,26 @@ public class PlayerStats : MonoBehaviour
     public int Strength;
     public int Intelligence;
     public int Dexterity;
+    [HideInInspector]
+    public int Level;
+    
 
     
 
     [HideInInspector]
     public List<Modifier> modifiers = new List<Modifier>();
-    [HideInInspector]
+    //[HideInInspector]
     public int currentHealth;
 
-    [HideInInspector]
+    //[HideInInspector]
     public int currentMagic;
+   
+    public void testUseMagic(int amount)
+    {
 
+        adjustCurrentMagic(amount);
+
+    }
 
     private int FetchModifiers(string modifierType)
     {
@@ -49,6 +58,7 @@ public class PlayerStats : MonoBehaviour
         {
             Debug.Log(amount*-1 + "Health Lost");
         }
+        
     }
 
 
@@ -56,8 +66,6 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Player has died");
     }
-
-
 
     public bool adjustCurrentMagic(int amount)
     {
@@ -71,7 +79,29 @@ public class PlayerStats : MonoBehaviour
             return false;
         } else
         {
+            
             return true;
+        }
+         
+    }
+    public void drainCurrentMagic(int amount)
+    {
+        currentMagic += amount;
+        if (currentMagic > MagicTotal)
+        {
+            currentMagic = MagicTotal;
+        }
+        if (currentMagic < 0)
+        {
+            currentMagic = 0;
+        }
+        if (amount > 0)
+        {
+            Debug.Log(amount + "Magic Gained");
+        }
+        else
+        {
+            Debug.Log(amount * -1 + "Magic Lost");
         }
     }
 
