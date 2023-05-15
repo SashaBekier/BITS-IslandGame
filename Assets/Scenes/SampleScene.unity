@@ -3412,7 +3412,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 122073cdbc0168b4eb7e1cc6f93f06b0, type: 2}
   - {fileID: 11400000, guid: d2ea0abb5ddb0f6459c9cf0531e85bda, type: 2}
   - {fileID: 11400000, guid: e1cd0fe1e710465488bc0bc32bf3ec63, type: 2}
-  altar: {fileID: 0}
+  altar: {fileID: 11400000, guid: 6ba7056b5c830134d966aa363c16a439, type: 2}
   puzzleReceivers: []
   rocks:
   - {fileID: 11400000, guid: 4c3e60b23cb2bd74ea3ce60157638e5c, type: 2}
