@@ -24,6 +24,22 @@ public class InventoryManager : MonoBehaviour
             AddItem(item);
         }
     }
+
+
+    public bool hasItemInInventory(Item item)
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = inventorySlots[i].GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.item == item)
+            {
+                
+                return true;
+            }
+        }
+        return false;
+    }
     public bool AddItem(Item item)
     {
         Debug.Log("Add Item called with " + item);
