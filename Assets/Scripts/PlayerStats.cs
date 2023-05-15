@@ -11,12 +11,18 @@ public class PlayerStats : MonoBehaviour
 
     [HideInInspector]
     public List<Modifier> modifiers = new List<Modifier>();
-    [HideInInspector]
+    //[HideInInspector]
     public int currentHealth;
 
-    [HideInInspector]
+    //[HideInInspector]
     public int currentMagic;
+   
+    public void testUseMagic(int amount)
+    {
 
+        adjustCurrentMagic(amount);
+
+    }
 
     private int FetchModifiers(string modifierType)
     {
@@ -56,8 +62,6 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Player has died");
     }
-
-
 
     public bool adjustCurrentMagic(int amount)
     {
