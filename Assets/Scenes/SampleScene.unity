@@ -833,11 +833,11 @@ RectTransform:
   m_Father: {fileID: 858640388}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -527}
-  m_SizeDelta: {x: 0, y: -1054}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 30}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &318919554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -888,9 +888,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31468623cfc94f24a83d526a046fc064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  warrior: {fileID: 1066576948}
+  player: {fileID: 1066576948}
   magicBar: {fileID: 318919554}
-  magicBarTransform: {fileID: 318919552}
+  widthAtFull: 300
+  warrior: {fileID: 1066576948}
 --- !u!1001 &359451729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3126,6 +3127,11 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 6992751230938003758, guid: 18a58e1d3e74c214eb92f327f3c46022, type: 3}
   startItems:
   - {fileID: 11400000, guid: 7cf3e99537be0f847894fdfe127beef9, type: 2}
+  - {fileID: 11400000, guid: 11634e3c062b03e4db033887fa0f0bf4, type: 2}
+  - {fileID: 11400000, guid: 11634e3c062b03e4db033887fa0f0bf4, type: 2}
+  - {fileID: 11400000, guid: 11634e3c062b03e4db033887fa0f0bf4, type: 2}
+  - {fileID: 11400000, guid: 3d67b112506b86b4a93966a1520f1fd3, type: 2}
+  - {fileID: 11400000, guid: 3d67b112506b86b4a93966a1520f1fd3, type: 2}
 --- !u!4 &899930896
 Transform:
   m_ObjectHideFlags: 0
@@ -3620,8 +3626,7 @@ MonoBehaviour:
   Strength: 5
   Intelligence: 5
   Dexterity: 5
-  healthBar: {fileID: 1991730488}
-  magicBar: {fileID: 318919556}
+  Level: 0
   currentHealth: 0
   currentMagic: 0
 --- !u!1 &1093257110
@@ -6191,11 +6196,11 @@ RectTransform:
   m_Father: {fileID: 858640388}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 525}
-  m_SizeDelta: {x: 0, y: -1050}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 30}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1991730486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6246,9 +6251,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4eed1366f2d634f826990609dce734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  warrior: {fileID: 1066576948}
+  player: {fileID: 1066576948}
   healthBar: {fileID: 1991730486}
-  healthBarTransform: {fileID: 1991730484}
+  widthAtFull: 300
+  warrior: {fileID: 1066576957}
 --- !u!1 &2004161795
 GameObject:
   m_ObjectHideFlags: 0

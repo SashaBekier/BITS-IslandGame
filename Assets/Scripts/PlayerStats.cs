@@ -6,9 +6,9 @@ public class PlayerStats : MonoBehaviour
     public int Strength;
     public int Intelligence;
     public int Dexterity;
-
-    public HealthBar healthBar;
-    public MagicBar magicBar;
+    [HideInInspector]
+    public int Level;
+    
 
     
 
@@ -58,7 +58,7 @@ public class PlayerStats : MonoBehaviour
         {
             Debug.Log(amount*-1 + "Health Lost");
         }
-        healthBar.UpdateHealthBar();
+        
     }
 
 
@@ -79,10 +79,30 @@ public class PlayerStats : MonoBehaviour
             return false;
         } else
         {
-            magicBar.UpdateMagicBar();
+            
             return true;
         }
          
+    }
+    public void drainCurrentMagic(int amount)
+    {
+        currentMagic += amount;
+        if (currentMagic > MagicTotal)
+        {
+            currentMagic = MagicTotal;
+        }
+        if (currentMagic < 0)
+        {
+            currentMagic = 0;
+        }
+        if (amount > 0)
+        {
+            Debug.Log(amount + "Magic Gained");
+        }
+        else
+        {
+            Debug.Log(amount * -1 + "Magic Lost");
+        }
     }
 
     public int HealthTotal
