@@ -11,7 +11,7 @@ public class Item_Equipable : Item
     [HideInInspector]
     public EquipSlot equipSlot;
     public Modifier[] modifiers;
-    [HideInInspector]
+    public bool is2Handed = false;
    
 
     public void OnAwake()

@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ae96536ec5e3504db27ad0114da99c9, type: 3}
-  m_Name: Sword
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: efda6516ddaa577469e9f1c1c871c009, type: 3}
+  sprite: {fileID: 21300000, guid: 960086a54a677d24db6f22544126248f, type: 3}
   maxStack: 1
   isEquipable: 1
-  equipSlotRequired: 3
+  equipSlotRequired: 4
   equipSlot: {fileID: 0}
-  modifiers:
-  - {fileID: 11400000, guid: a9d33d217ccad9f4291748d16a91a070, type: 2}
+  modifiers: []
   is2Handed: 0

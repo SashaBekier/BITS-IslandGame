@@ -46,12 +46,9 @@ public class EquipItem : InventoryItem
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             Debug.Log("Right Click caught");
-            if (InventoryManager.instance.AddItem(item))
-                {
-                    int slotIndex = (int)equipableItem.equipSlotRequired;
-                    EquipManager.equipManager.doff(slotIndex);
+            int slotIndex = (int)equipableItem.equipSlotRequired;
+            EquipManager.equipManager.doff(slotIndex);
 
-                }
                 
             
             //item.RightClick();
