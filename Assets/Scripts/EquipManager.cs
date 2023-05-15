@@ -79,7 +79,7 @@ public class EquipManager : InventoryManager
                     player.modifiers.Remove(modifier);
                 }
                 Debug.Log("Doffed " + itemToDoff + "Player Strength = " + player.StrengthTotal);
-                Destroy(itemToDoff);
+                Destroy(itemToDoff.gameObject);
                 slotClear = true;
             }
         }
