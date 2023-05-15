@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.UI.CanvasScaler;
 
 public class EquipItem : InventoryItem
 {
@@ -34,6 +35,7 @@ public class EquipItem : InventoryItem
         item = newEquip;
         equipableItem = newEquip;
         image.sprite = item.sprite;
+        
         //RefreshCount();
     }
 
