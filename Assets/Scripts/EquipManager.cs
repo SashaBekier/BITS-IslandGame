@@ -39,7 +39,20 @@ public class EquipManager : InventoryManager
     {
         Debug.Log("Donning " + itemToDon + "Player Strength = " + player.StrengthTotal);
         int slotIndex = (int)itemToDon.equipSlotRequired;
-        if (doff(slotIndex))
+        if (slotIndex == (int)EquipSlotNames.OffHand) //This catches equiping to off hand with a 2 handed item in onHand
+        {
+            Debug.Log("Offhand Donning detected");
+            EquipItem onHand = inventorySlots[(int)EquipSlotNames.OnHand].GetComponentInChildren<EquipItem>();
+            if (onHand == null)
+            {
+                Debug.Log("On hand empty");
+            } else if (onHand.equipableItem.is2Handed)
+            {
+                Debug.Log("On hand Equip is 2-Handed");
+                doff((int)EquipSlotNames.OnHand);
+            }
+        }
+        if (doff(slotIndex)&&(!itemToDon.is2Handed || doff((int)EquipSlotNames.OffHand))) // This catches equipping to onHand with a 2-H item
         {
             PutEquipmentAtSlot(itemToDon, (EquipSlot)inventorySlots[slotIndex]);
             foreach (Modifier modifier in itemToDon.modifiers)
@@ -72,7 +85,8 @@ public class EquipManager : InventoryManager
             slotClear = true;
         } else
         {
-            
+            if (InventoryManager.instance.AddItem(itemToDoff.item))
+            {
                 foreach (Modifier modifier in (itemToDoff.equipableItem.modifiers))
                 {
                     player.modifiers.Remove(modifier);
@@ -80,6 +94,7 @@ public class EquipManager : InventoryManager
                 Debug.Log("Doffed " + itemToDoff + "Player Strength = " + player.StrengthTotal);
                 Destroy(itemToDoff.gameObject);
                 slotClear = true;
+            }
             
         }
         return slotClear;
