@@ -153,7 +153,7 @@ public class PlayerMouseMovement : MonoBehaviour
             while (pathFound.Count > 0)
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
-                Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
+                //Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
                 //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
                 checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
             }

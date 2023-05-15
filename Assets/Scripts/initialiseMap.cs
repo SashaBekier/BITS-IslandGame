@@ -89,6 +89,7 @@ public class initialiseMap : MonoBehaviour
         PlacePlayer();
         SpawnEnemies();
         SpawnPuzzlePieces();
+        SpawnAltars();
 
     }
 
@@ -107,7 +108,7 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 250; i++)
         {
-            UnityEngine.Debug.Log("Spawning Rocks");
+            //UnityEngine.Debug.Log("Spawning Rocks");
             Vector3Int gridPosition1 = getTargetTile();
             int rockIndex = UnityEngine.Random.Range(0, rocks.Length);
             
@@ -213,7 +214,7 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 30; i++)
         {
-            UnityEngine.Debug.Log("Spawning Plants");
+            //UnityEngine.Debug.Log("Spawning Plants");
             Vector3Int gridPosition1 = getTargetTile();
             int plantIndex = UnityEngine.Random.Range(0, plants.Length);
             int plantDensity = UnityEngine.Random.Range(plants[plantIndex].spriteDensityMin, plants[plantIndex].spriteDensityMax+1);
@@ -303,7 +304,7 @@ public class initialiseMap : MonoBehaviour
             for (int ycoord = 0; ycoord <= islandSize; ycoord++)
             {
                 Vector3Int coords = new Vector3Int(xcoord, ycoord);
-                Debug.Log(coords + " " +terrainTilemap.GetTile(coords).ToString());
+                //Debug.Log(coords + " " +terrainTilemap.GetTile(coords).ToString());
                 if (!terrainTilemap.GetTile(coords).ToString().Equals("ocean_tile"))
                 {
                     

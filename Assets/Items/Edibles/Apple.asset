@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e1f3f67fd90d64796f444018522819, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: eb8e02e05cdea5448b98a966bc4da9d5, type: 3}
+  sprite: {fileID: 21300000, guid: eb8e02e05cdea5448b98a966bc4da9d5, type: 3}
   maxStack: 20
+  isEquipable: 0
   healthChange: 5
   magicChange: 0
