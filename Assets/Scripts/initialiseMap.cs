@@ -235,8 +235,13 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
+            Vector3Int gridPosition1;
             UnityEngine.Debug.Log("Spawning Altars");
-            Vector3Int gridPosition1 = getTargetTile();
+            do
+            {
+                gridPosition1 = getTargetTile();
+
+            } while (!accessibleToPlayer(gridPosition1));
             Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
             WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
             WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
@@ -550,7 +555,7 @@ public class initialiseMap : MonoBehaviour
             enemyPlacement.Initialise(enemies[i]);
 
             // Offset the enemy sprite position
-            Vector3 spriteOffset = new Vector3(0, 0.3f, 0); // Adjust the Y offset as needed
+            Vector3 spriteOffset = new Vector3(0, 0f, 0); // Adjust the Y offset as needed
             enemyPlacement.transform.position += spriteOffset;
 
             setCoordsUnavailable(gridPosition);
