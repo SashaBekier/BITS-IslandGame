@@ -227,15 +227,15 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("Level Up! You are now level " + Level);
         lastLevelXP = nextLevelXP;
         nextLevelXP += 900 + 100 * Level;
-        Intelligence += 3;
+        Intelligence += 1;
         int heroType = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>().heroType;
         if (heroType == 0 ) {
-            Strength += 10;
-            Dexterity += 5;
+            Strength += 3;
+            Dexterity += 2;
         } else if(heroType == 1 )
         {
-            Strength += 5;
-            Dexterity += 10;
+            Strength += 2;
+            Dexterity += 3;
         }
         currentHealth = HealthTotal;
         currentMagic = MagicTotal;
