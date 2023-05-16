@@ -133,7 +133,23 @@ public class PlayerMouseMovement : MonoBehaviour
         }
 
     }
+    public void enqueuePathToCoords(Vector3Int gridPosition)
+    {
+        if (ground.HasTile(gridPosition) && !impassable.HasTile(gridPosition))
+        {
+            Vector3Int playerCell = ground.WorldToCell(transform.position);
+            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
+            checkpoints.Clear();
 
+            while (pathFound.Count > 0)
+            {
+                Vector3Int nextCoords = pathFound.Dequeue();
+                //Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
+                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
+                checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
+            }
+        }
+    }
     public void enqueuePathToMousePosition(bool checkPointer)
     {
         if(isPointerOverGameObject && checkPointer)
@@ -143,21 +159,8 @@ public class PlayerMouseMovement : MonoBehaviour
         Vector2 mousePosition = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         Vector3Int gridPosition = ground.WorldToCell(mousePosition);
-
-        if (ground.HasTile(gridPosition)&&!impassable.HasTile(gridPosition) )
-        {
-            Vector3Int playerCell = ground.WorldToCell(transform.position);
-            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
-            checkpoints.Clear();
-            
-            while (pathFound.Count > 0)
-            {
-                Vector3Int nextCoords = pathFound.Dequeue();
-                //Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
-                //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
-                checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
-            }
-        }
+        enqueuePathToCoords(gridPosition);
+        
         catchingMoveData = true;
 
     }

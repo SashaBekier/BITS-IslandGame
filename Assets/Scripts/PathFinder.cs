@@ -18,6 +18,10 @@ public class PathFinder : MonoBehaviour
         instance = this;
     }
    
+    public Vector3Int playerTile()
+    {
+        return impassable.WorldToCell(initData.player.transform.position);
+    }
 
     public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords)
     {
