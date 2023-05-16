@@ -16,6 +16,9 @@ public class CharacterStatsScreen : MonoBehaviour
     public Text rangedText;
     public Text movementText;
     public Text speedText;
+    public Text xpText;
+    public Text levelText;
+    public Text totalxpText;
 
     void Update()
     {
@@ -31,6 +34,9 @@ public class CharacterStatsScreen : MonoBehaviour
         int rangedValue = warrior.GetComponent<PlayerStats>().RangedTotal;
         int movementValue = warrior.GetComponent<PlayerStats>().MovementTotal;
         int speedValue = warrior.GetComponent<PlayerStats>().SpeedTotal;
+        int xpValue = warrior.GetComponent<PlayerStats>().currentXP;
+        int levelValue = warrior.GetComponent<PlayerStats>().Level;
+        int totalxpValue = warrior.GetComponent<PlayerStats>().nextLevelXP;
 
         // Set the text elements to display the player's stats values
         healthText.text = "Health: " + healthValue.ToString();
@@ -43,5 +49,8 @@ public class CharacterStatsScreen : MonoBehaviour
         rangedText.text = "Ranged: " + rangedValue.ToString();
         movementText.text = "Movement: " + movementValue.ToString();
         speedText.text = "Speed: " + speedValue.ToString();
+        xpText.text = "XP: " + xpValue.ToString();
+        levelText.text = "Level: " + levelValue.ToString();
+        totalxpText.text = "Total XP: " + totalxpValue.ToString();
     }
 }

@@ -11,6 +11,7 @@ public class Item : ScriptableObject
     public int maxStack = 10;
 
     public bool isEquipable = false;
+    public int xpReward = 0;
 
      public virtual void RightClick()
     {

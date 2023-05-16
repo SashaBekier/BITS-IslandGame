@@ -15,3 +15,4 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 40afd7eedf8ccfe40a1713385ac49382, type: 3}
   maxStack: 1
   isEquipable: 0
+  xpReward: 200

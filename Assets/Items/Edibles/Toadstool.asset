@@ -15,5 +15,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 5b3828ba26675924fad2139eb1ead51e, type: 3}
   maxStack: 20
   isEquipable: 0
-  healthChange: -2
+  xpReward: 5
+  healthChange: -5
   magicChange: -2
+  xpChange: 500

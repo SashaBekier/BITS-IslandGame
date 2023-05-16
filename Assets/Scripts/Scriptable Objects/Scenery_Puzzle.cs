@@ -74,6 +74,7 @@ public class Scenery_Puzzle : Scenery
                     if(PuzzleManager.instance.altarsSolved == 3)
                     {
                         PuzzleManager.instance.openPortal();
+                        GameObject.Find("Warrior").GetComponent<PlayerStats>().AdjustXP(500);
                     }
                     break;
                 }
