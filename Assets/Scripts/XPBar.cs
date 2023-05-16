@@ -9,8 +9,9 @@ public class XPBar : MonoBehaviour
     //public RectTransform XPBarTransform; // Reference to the RectTransform component attached to the XP bar image
     private int lastKnownHeroLevel;
     private int lastKnownXP;
-    private int lastKnownTotalXP;
+    private int nextLevelXP;
     [HideInInspector] public PlayerStats warrior;
+    private int lastLevelXP;
 
 
     void Start()
@@ -18,8 +19,8 @@ public class XPBar : MonoBehaviour
         warrior = player.GetComponent<PlayerStats>();
         lastKnownHeroLevel = warrior.Level;
         lastKnownXP = warrior.currentXP;
-        lastKnownTotalXP = warrior.totalXP;
-
+        nextLevelXP = warrior.nextLevelXP;
+        lastLevelXP = warrior.lastLevelXP;
         UpdateXPBar();
     }
 
@@ -29,12 +30,13 @@ public class XPBar : MonoBehaviour
         if (lastKnownHeroLevel != warrior.Level)
         {
             lastKnownHeroLevel = warrior.Level;
+            lastLevelXP = nextLevelXP;
+            nextLevelXP = warrior.nextLevelXP;
             isRefreshNeeded = true;
         }
-        if (lastKnownXP != warrior.currentXP || lastKnownTotalXP != warrior.totalXP)
+        if (lastKnownXP != warrior.currentXP )
         {
             lastKnownXP = warrior.currentXP;
-            lastKnownTotalXP = warrior.totalXP;
             isRefreshNeeded = true;
         }
 
@@ -48,8 +50,8 @@ public class XPBar : MonoBehaviour
     // Call this method to update the XP bar
     public void UpdateXPBar()
     {
-        float xpRatio = (float)lastKnownXP / (float)lastKnownTotalXP;
+        float xpRatio = ((float)lastKnownXP - lastLevelXP) / ((float)nextLevelXP-lastLevelXP);
         float newWidth = xpRatio * widthAtFull;
-        XPBarthing.rectTransform.sizeDelta = new Vector2(newWidth, 30);
+        XPBarthing.rectTransform.sizeDelta = new Vector2(newWidth, 5);
     }
 }

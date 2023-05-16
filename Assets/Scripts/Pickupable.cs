@@ -28,8 +28,10 @@ public class Pickupable : MonoBehaviour, IPointerClickHandler
         {
             if (InventoryManager.instance.AddItem(item))
             {
+                GameObject.Find("Warrior").GetComponent<PlayerStats>().AdjustXP(item.xpReward);
                 Destroy(gameObject);
             }
+
         }
     }
 

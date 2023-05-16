@@ -22,7 +22,7 @@ public class MagicBar : MonoBehaviour
         lastKnownMagic = warrior.MagicTotal;
         lastKnownHeroLevel = warrior.Level;
 
-        UpdateHealthBar();
+        UpdateMagicBar();
     }
 
     private void Update()
@@ -41,16 +41,16 @@ public class MagicBar : MonoBehaviour
 
         if (isRefreshNeeded)
         {
-            UpdateHealthBar();
+            UpdateMagicBar();
             isRefreshNeeded = false;
         }
     }
 
 
     // Call this method to update the health bar
-    public void UpdateHealthBar()
+    public void UpdateMagicBar()
     {
-        if (lastKnownMagic > warrior.currentHealth)
+        if (lastKnownMagic > warrior.currentMagic)
         {
             lastKnownMagic -= 1 / maxMagic;
         }
@@ -58,7 +58,7 @@ public class MagicBar : MonoBehaviour
         {
             lastKnownMagic += 1 / maxMagic;
         }
-        float newWidth = lastKnownMagic / maxMagic * widthAtFull;
+        float newWidth = (lastKnownMagic / maxMagic) * widthAtFull;
         magicBar.rectTransform.sizeDelta = new Vector2(newWidth, 30);
 
     }

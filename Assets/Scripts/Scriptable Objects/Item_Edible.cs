@@ -7,6 +7,7 @@ public class Item_Edible : Item
 {
     public int healthChange;
     public int magicChange;
+    public int xpChange;
      
     
 
@@ -28,7 +29,7 @@ public class Item_Edible : Item
         Debug.Log("Item_Edible Right Click Called");
         if (healthChange != 0) { player.adjustCurrentHealth(healthChange); }
         if (magicChange != 0) { player.drainCurrentMagic(magicChange); }
-
+        if (xpChange != 0) { player.AdjustXP(xpChange); }
         Item thisItem = this;
         InventoryManager.instance.DestroyItem(thisItem);
     }

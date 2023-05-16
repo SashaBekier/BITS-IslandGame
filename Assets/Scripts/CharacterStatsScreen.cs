@@ -36,7 +36,7 @@ public class CharacterStatsScreen : MonoBehaviour
         int speedValue = warrior.GetComponent<PlayerStats>().SpeedTotal;
         int xpValue = warrior.GetComponent<PlayerStats>().currentXP;
         int levelValue = warrior.GetComponent<PlayerStats>().Level;
-        int totalxpValue = warrior.GetComponent<PlayerStats>().totalXP;
+        int totalxpValue = warrior.GetComponent<PlayerStats>().nextLevelXP;
 
         // Set the text elements to display the player's stats values
         healthText.text = "Health: " + healthValue.ToString();

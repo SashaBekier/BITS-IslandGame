@@ -9,7 +9,8 @@ public class PlayerStats : MonoBehaviour
     [HideInInspector]
     public int Level;
     public int currentXP;
-    public int totalXP;
+    public int nextLevelXP;
+    public int lastLevelXP;
 
 
 
@@ -208,12 +209,12 @@ public class PlayerStats : MonoBehaviour
             return total;
         }
     }
-    public void AddXP(int xpAmount)
+    public void AdjustXP(int xpAmount)
     {
         currentXP += xpAmount;
-        totalXP += xpAmount;
+        
 
-        if (currentXP >= 1000)
+        if (currentXP >= nextLevelXP)
         {
             LevelUp();
         }
@@ -221,9 +222,23 @@ public class PlayerStats : MonoBehaviour
 
     private void LevelUp()
     {
-        currentXP = 0;
+        
         Level++;
         Debug.Log("Level Up! You are now level " + Level);
+        lastLevelXP = nextLevelXP;
+        nextLevelXP += 900 + 100 * Level;
+        Intelligence += 3;
+        int heroType = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>().heroType;
+        if (heroType == 0 ) {
+            Strength += 10;
+            Dexterity += 5;
+        } else if(heroType == 1 )
+        {
+            Strength += 5;
+            Dexterity += 10;
+        }
+        currentHealth = HealthTotal;
+        currentMagic = MagicTotal;
     }
 
     public int GetCurrentXP()
@@ -233,7 +248,7 @@ public class PlayerStats : MonoBehaviour
 
     public int GetTotalXP()
     {
-        return totalXP;
+        return nextLevelXP;
     }
 
 
@@ -244,6 +259,13 @@ public class PlayerStats : MonoBehaviour
     {
         currentHealth = HealthTotal;
         currentMagic = MagicTotal;
+        nextLevelXP = 900 * Level;
+        for(int i = 1; i < Level+1; i++)
+        {
+            nextLevelXP += Level * 100;
+            
+        }
+        lastLevelXP = nextLevelXP - 900 - (100 * Level);
         Modifier myModifier = (Modifier)ScriptableObject.CreateInstance("Modifier");
         myModifier.initialise("Strength", 20);
         modifiers.Add(myModifier);

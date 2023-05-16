@@ -27,7 +27,11 @@ public class deFog : MonoBehaviour
         {
             for (int j = -vision; j <= vision; j++)
             {
-                fogTilemap.SetTile(currentPlayerPosition + new Vector3Int(i, j, 0), null);
+                Vector3Int testingTile = currentPlayerPosition + new Vector3Int(i, j, 0);
+                if (fogTilemap.HasTile(testingTile)) {
+                    fogTilemap.SetTile(testingTile, null);
+                    GameObject.Find("Warrior").GetComponent<PlayerStats>().AdjustXP(1);
+                }
             }
         }
     }
