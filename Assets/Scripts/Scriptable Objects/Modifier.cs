@@ -13,5 +13,12 @@ public class Modifier : ScriptableObject
             this.modType = modType;
             this.magnitude = magnitude;
         }
+
+    public Modifier newModifier(string modType, int magnitude)
+    {
+        Modifier myModifier = (Modifier)ScriptableObject.CreateInstance("Modifier");
+        myModifier.initialise(modType, magnitude);
+        return myModifier;
+    }
     
 }
