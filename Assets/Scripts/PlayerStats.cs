@@ -8,9 +8,11 @@ public class PlayerStats : MonoBehaviour
     public int Dexterity;
     [HideInInspector]
     public int Level;
-    
+    public int currentXP;
+    public int totalXP;
 
-    
+
+
 
     [HideInInspector]
     public List<Modifier> modifiers = new List<Modifier>();
@@ -206,6 +208,36 @@ public class PlayerStats : MonoBehaviour
             return total;
         }
     }
+    public void AddXP(int xpAmount)
+    {
+        currentXP += xpAmount;
+        totalXP += xpAmount;
+
+        if (currentXP >= 1000)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        currentXP = 0;
+        Level++;
+        Debug.Log("Level Up! You are now level " + Level);
+    }
+
+    public int GetCurrentXP()
+    {
+        return currentXP;
+    }
+
+    public int GetTotalXP()
+    {
+        return totalXP;
+    }
+
+
+
 
     //testing
     private void Start()
