@@ -22,3 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d15aba739d9355439431186d95da6bc, type: 2}
   - {fileID: 11400000, guid: f30bc65cc8fc3214ca54970c834d0c84, type: 2}
   - {fileID: 11400000, guid: 0e1bb07e85962b44cae7e202c9f931ee, type: 2}
+  bookAddedSprites:
+  - {fileID: 21300000, guid: 77d53ce4f52072241aa46971d6e96e90, type: 3}
+  - {fileID: 21300000, guid: 417e716e502fcb74695b6b4815eb837e, type: 3}
+  - {fileID: 21300000, guid: 77716fb388f738d49b474b322ababd00, type: 3}

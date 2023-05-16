@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenery: {fileID: 0}
   spriteRenderer: {fileID: 2994180541903024340}
+  ID: 0
 --- !u!60 &-8918403457275956207
 PolygonCollider2D:
   m_ObjectHideFlags: 0

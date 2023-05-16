@@ -8,14 +8,38 @@ using UnityEngine.EventSystems;
 public class Scenery_Puzzle : Scenery
 {
     public Item_PuzzlePiece[] puzzlePieces;
-    public override void RightClick()
+    public Sprite[] bookAddedSprites = new Sprite[3];
+
+
+    public override void RightClick(PointerEventData eventData)
     {
-        Debug.Log("Puzzle Scenery object right clicked on");
-        for(int i = 0; i < puzzlePieces.Length; i++)
+        
+        GameObject worldScenery = eventData.pointerPress;
+        string worldSceneryName = worldScenery.name;
+        
+        WorldScenery altar = PuzzleManager.instance.getAltarObject(worldSceneryName);
+
+        Debug.Log("Puzzle Scenery object right clicked on " + worldScenery);
+        
+        if (altar.needsBook)
         {
-            if (InventoryManager.instance.hasItemInInventory(puzzlePieces[i]))
+            Debug.Log("The altar is empty");
+            for (int i = 0; i < puzzlePieces.Length; i++)
             {
-                Debug.Log(puzzlePieces[i] + "detected in inventory");
+                if (InventoryManager.instance.hasItemInInventory(puzzlePieces[i]))
+                {
+                    Debug.Log(puzzlePieces[i] + "detected in inventory");
+                    InventoryManager.instance.DestroyItem(puzzlePieces[i]);
+                    altar.setSprite(bookAddedSprites[i]);
+                    altar.needsBook = false;
+                    PuzzleManager.instance.altarsSolved++;
+                    Debug.Log("Puzzle Manager reports " + PuzzleManager.instance.altarsSolved + " Altars solved");
+                    if(PuzzleManager.instance.altarsSolved == 3)
+                    {
+                        PuzzleManager.instance.openPortal();
+                    }
+                    break;
+                }
             }
         }
     }
