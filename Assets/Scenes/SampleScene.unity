@@ -2135,6 +2135,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6b4cc2ce2dea94b9f072fa18152709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &599022456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 599022458}
+  - component: {fileID: 599022457}
+  m_Layer: 0
+  m_Name: PuzzleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &599022457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599022456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4d187509a7c1949ab31e4cbd3d8d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenery_Puzzles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  portalLocation: {x: 0, y: 0, z: 0}
+  altars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  altarsSolved: 0
+--- !u!4 &599022458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599022456}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &629633569 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -74523829415549177, guid: 14eb716ea9785b443a7de1a72fca1784, type: 3}
@@ -3205,6 +3259,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4d542ced5b7c3e42a984c91aa618a04, type: 2}
   - {fileID: 11400000, guid: 977b9f56029cba0409b83095ac32a747, type: 2}
   - {fileID: 11400000, guid: e596bd1558d55774eb3def7205942cc0, type: 2}
+  - {fileID: 11400000, guid: 2d15aba739d9355439431186d95da6bc, type: 2}
+  - {fileID: 11400000, guid: f30bc65cc8fc3214ca54970c834d0c84, type: 2}
+  - {fileID: 11400000, guid: 0e1bb07e85962b44cae7e202c9f931ee, type: 2}
 --- !u!4 &899930896
 Transform:
   m_ObjectHideFlags: 0
@@ -5245,7 +5302,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737545132
 GameObject:

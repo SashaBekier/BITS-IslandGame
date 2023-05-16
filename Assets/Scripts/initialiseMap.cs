@@ -250,31 +250,31 @@ public class initialiseMap : MonoBehaviour
                 }
                 foreach(Vector3Int gridPosition in gridPositions)
                 {
-                    if (!accessibleToPlayer(gridPosition))
+                    if (!accessibleToPlayer(gridPosition) || !coordsAreAvailable(gridPosition))
                     {
                         siteSuitable = false;
                     }
                 }
                 
             } while (!siteSuitable);
-            SpawnAltar(gridPositions[0]);
-            SpawnAltar(gridPositions[1]);
-            SpawnAltar(gridPositions[2]);
-            SpawnPortal(gridPositions[3]);
+            SpawnAltar(gridPositions[0],0);
+            SpawnAltar(gridPositions[1],1);
+            SpawnAltar(gridPositions[2],2);
+            PuzzleManager.instance.portalLocation = gridPositions[3];
         
     }
 
-    private void SpawnPortal(Vector3Int gridPosition)
-    {
-        Debug.Log("Portal at " + gridPosition);
-    }
 
-    private void SpawnAltar(Vector3Int gridPosition1)
+
+    private void SpawnAltar(Vector3Int gridPosition1, int id)
     {
         Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
         WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
         WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
         worldScenery.Initialise(altar);
+        worldScenery.name = "Altar"+id.ToString();
+        PuzzleManager.instance.altars[id] = newScenery;
+        
         setCoordsUnavailable(gridPosition1);
         impassableTilemap.SetTile(gridPosition1, collisionTile);
     }

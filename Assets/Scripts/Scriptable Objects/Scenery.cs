@@ -1,5 +1,7 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 [CreateAssetMenu(fileName = "Scenery", menuName = "ScriptableObject/Scenery")]
 public class Scenery : ScriptableObject
 {
@@ -17,7 +19,7 @@ public class Scenery : ScriptableObject
         return answer;
     }
 
-    public virtual void RightClick()
+    public virtual void RightClick(PointerEventData eventData)
     {
         Debug.Log("Scenery object right clicked on");
     }

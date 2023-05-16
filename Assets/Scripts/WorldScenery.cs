@@ -10,7 +10,8 @@ public class WorldScenery : MonoBehaviour, IPointerClickHandler
     public Scenery scenery;
 
     public SpriteRenderer spriteRenderer;
-
+    [HideInInspector]
+    public bool needsBook = true;
 
     public void Start()
     {
@@ -22,13 +23,19 @@ public class WorldScenery : MonoBehaviour, IPointerClickHandler
         this.scenery = scenery;
         spriteRenderer.sprite = scenery.sprite;
     }
+   
+
+    public void setSprite(Sprite sprite)
+    {
+        spriteRenderer.sprite = sprite;
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             Debug.Log("Right Click caught");
-            scenery.RightClick();
+            scenery.RightClick(eventData);
         }
         if(eventData.button == PointerEventData.InputButton.Left)
         {
