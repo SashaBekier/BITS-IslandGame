@@ -233,22 +233,50 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnAltars()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            Vector3Int gridPosition1;
+        Vector3Int[] gridPositions = new Vector3Int[4];
             UnityEngine.Debug.Log("Spawning Altars");
+            bool siteSuitable = true;
             do
             {
-                gridPosition1 = getTargetTile();
+                siteSuitable = true;
+                gridPositions[0] = getTargetTile();
+                gridPositions[1] = gridPositions[0] - new Vector3Int(0, 2, 0);
+                gridPositions[2] = gridPositions[0] - new Vector3Int(2, 1, 0);
+                gridPositions[3] = gridPositions[0] - new Vector3Int(1, 1, 0);
+                if(gridPositions[0].y % 2 == 1)
+                {
+                    gridPositions[2].x += 1;
+                    gridPositions[3].x += 1;
+                }
+                foreach(Vector3Int gridPosition in gridPositions)
+                {
+                    if (!accessibleToPlayer(gridPosition))
+                    {
+                        siteSuitable = false;
+                    }
+                }
+                
+            } while (!siteSuitable);
+            SpawnAltar(gridPositions[0]);
+            SpawnAltar(gridPositions[1]);
+            SpawnAltar(gridPositions[2]);
+            SpawnPortal(gridPositions[3]);
+        
+    }
 
-            } while (!accessibleToPlayer(gridPosition1));
-            Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
-            WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
-            WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
-            worldScenery.Initialise(altar);
-            setCoordsUnavailable(gridPosition1);
-            impassableTilemap.SetTile(gridPosition1, collisionTile); 
-        }
+    private void SpawnPortal(Vector3Int gridPosition)
+    {
+        Debug.Log("Portal at " + gridPosition);
+    }
+
+    private void SpawnAltar(Vector3Int gridPosition1)
+    {
+        Vector3 altarPosition = terrainTilemap.CellToWorld(gridPosition1);
+        WorldScenery newScenery = Instantiate(sceneryPrefab, altarPosition, Quaternion.identity);
+        WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+        worldScenery.Initialise(altar);
+        setCoordsUnavailable(gridPosition1);
+        impassableTilemap.SetTile(gridPosition1, collisionTile);
     }
 
     private void SpawnPlant(Vector3Int gridPosition1, int plantIndex, bool shiftToNeighbour)
