@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
@@ -13,10 +14,13 @@ public class PuzzleManager : MonoBehaviour
 
     [HideInInspector]
     public Vector3Int portalLocation;
+    public Scenery portal;
     [HideInInspector]
     public WorldScenery[] altars = new WorldScenery[3];
     [HideInInspector]
     public int altarsSolved = 0;
+
+    public WorldScenery sceneryPrefab;
 
 
     private void Awake()
@@ -29,7 +33,15 @@ public class PuzzleManager : MonoBehaviour
     {
      
             Debug.Log("Puzzle Manager triggers Portal");
-     
+        //GameObject.Instantiate(portalPrefab, PathFinder.instance.impassable.CellToWorld(portalLocation), Quaternion.identity);
+        Vector3 portalPosition = PathFinder.instance.impassable.CellToWorld(portalLocation);
+        WorldScenery newScenery = Instantiate(sceneryPrefab, portalPosition, Quaternion.identity);
+        WorldScenery worldScenery = newScenery.GetComponent<WorldScenery>();
+        worldScenery.Initialise(portal);
+        portalPosition = PathFinder.instance.impassable.CellToWorld(new Vector3Int(-15,8,0));
+        newScenery = Instantiate(sceneryPrefab, portalPosition, Quaternion.identity);
+        worldScenery = newScenery.GetComponent<WorldScenery>();
+        worldScenery.Initialise(portal);
     }
 
     public WorldScenery getAltarObject(string name)

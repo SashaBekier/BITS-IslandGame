@@ -29,7 +29,7 @@ public class initialiseMap : MonoBehaviour
 
     public Tile oceanTile;
 
-    public Tile rockTile;
+    
     public Tile fogTile;
     public Tile collisionTile;
 
@@ -91,6 +91,7 @@ public class initialiseMap : MonoBehaviour
         SpawnPuzzlePieces();
         SpawnAltars();
 
+       
     }
 
     private void PlacePlayer()
@@ -248,15 +249,23 @@ public class initialiseMap : MonoBehaviour
                     gridPositions[2].x += 1;
                     gridPositions[3].x += 1;
                 }
-                foreach(Vector3Int gridPosition in gridPositions)
+                impassableTilemap.SetTile(gridPositions[0], collisionTile);
+                impassableTilemap.SetTile(gridPositions[1], collisionTile);
+                impassableTilemap.SetTile(gridPositions[2], collisionTile);
+                foreach (Vector3Int gridPosition in gridPositions)
                 {
-                    if (!accessibleToPlayer(gridPosition) || !coordsAreAvailable(gridPosition))
+                    if (!accessibleToPlayer(gridPositions[3]) || !coordsAreAvailable(gridPosition))
                     {
                         siteSuitable = false;
                     }
                 }
-                
-            } while (!siteSuitable);
+            if (!siteSuitable)
+            {
+                impassableTilemap.SetTile(gridPositions[0], null);
+                impassableTilemap.SetTile(gridPositions[1], null);
+                impassableTilemap.SetTile(gridPositions[2], null);
+            }
+        } while (!siteSuitable);
             SpawnAltar(gridPositions[0],0);
             SpawnAltar(gridPositions[1],1);
             SpawnAltar(gridPositions[2],2);
