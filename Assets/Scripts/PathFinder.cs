@@ -22,16 +22,34 @@ public class PathFinder : MonoBehaviour
     {
         return impassable.WorldToCell(initData.player.transform.position);
     }
-
     public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords)
+    {
+        return FindPath(startCoords, endCoords, false);
+    }
+    public Queue<Vector3Int> FindPath(Vector3Int startCoords, Vector3Int endCoords, bool searchLimited)
     {
         Queue<Vector3Int> path = new Queue<Vector3Int>();
         Vector3Int lastEnqueued = startCoords;
-        
-        Dictionary<Vector3Int, int> outboundStepCount = GenerateStepCount(startCoords);
+        Dictionary<Vector3Int, int> outboundStepCount;
+        Dictionary<Vector3Int, int> inboundStepCount;
+        if (searchLimited)
+        {
+            outboundStepCount = GenerateStepCount(startCoords, 25);
+        }
+        else
+        {
+            outboundStepCount = GenerateStepCount(startCoords);
+        }
         if (outboundStepCount.ContainsKey(endCoords)) 
         {
-            Dictionary<Vector3Int, int> inboundStepCount = GenerateStepCount(endCoords);
+            if (searchLimited)
+            {
+                inboundStepCount = GenerateStepCount(endCoords, 25);
+            }
+            else
+            {
+                inboundStepCount = GenerateStepCount(endCoords);
+            }
             Dictionary<Vector3Int, int> combinedStepCount = new Dictionary<Vector3Int, int>();
             int lowestCombined = 10000;
             int xMin = 0;
@@ -95,16 +113,16 @@ public class PathFinder : MonoBehaviour
         }
         return answer;
     }
-    public Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
+    public Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords, int maxSteps)
     {
         Queue<Vector3Int> checkNeighboursOf = new Queue<Vector3Int>();
         Dictionary<Vector3Int, int> answer = new Dictionary<Vector3Int, int>();
-
+        bool interruptLoop = false;
         
         answer.Add(coords, 0);
         
         checkNeighboursOf.Enqueue(coords);
-        while(checkNeighboursOf.Count > 0 )
+        while(checkNeighboursOf.Count > 0 && !interruptLoop )
         {
             Vector3Int checkNeighbour = checkNeighboursOf.Dequeue();
             List<Vector3Int> newNeighbours = getNeighbourCoords(checkNeighbour);
@@ -112,16 +130,26 @@ public class PathFinder : MonoBehaviour
             {
                 
                 if(!impassable.HasTile(neighbour) && !answer.ContainsKey(neighbour)) {
-                    answer.Add(neighbour, answer[checkNeighbour] +1);
+                    int steps = answer[checkNeighbour] + 1;
+                    answer.Add(neighbour, steps );
                     checkNeighboursOf.Enqueue(neighbour);
+                    if (steps > maxSteps)
+                    {
+                        interruptLoop = true;
+                        break;
+                    }
                 }
-
+                
             }
+            
             
         }
         return answer;
     }
-
+    public Dictionary<Vector3Int, int> GenerateStepCount(Vector3Int coords)
+    {
+        return GenerateStepCount(coords, initData.islandSize * 2);
+    }
 
     public List<Vector3Int> getNeighbourCoords(Vector3Int coords)
     {
