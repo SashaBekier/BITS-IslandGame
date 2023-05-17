@@ -34,9 +34,20 @@ public class PathFinder : MonoBehaviour
             Dictionary<Vector3Int, int> inboundStepCount = GenerateStepCount(endCoords);
             Dictionary<Vector3Int, int> combinedStepCount = new Dictionary<Vector3Int, int>();
             int lowestCombined = 10000;
-            for (int i = 0; i < initData.islandSize; i++)
+            int xMin = 0;
+            int xMax = initData.islandSize;
+            int yMin = 0;
+            int yMax = initData.islandSize;
+            if(startCoords.x < 0)
             {
-                for (int j = 0; j < initData.islandSize; j++)
+                xMin = -20;
+                xMax = -1;
+                yMin = 0;
+                yMax = 20;
+            }
+            for (int i = xMin; i < xMax; i++)
+            {
+                for (int j = yMin; j < yMax; j++)
                 {
                     Vector3Int coords = new Vector3Int(i, j, 0);
 
@@ -115,11 +126,11 @@ public class PathFinder : MonoBehaviour
     public List<Vector3Int> getNeighbourCoords(Vector3Int coords)
     {
         List<Vector3Int> neighbours = new List<Vector3Int>();
-        if (coords.x > 0)
-        {
+        //if (coords.x > 0)
+        //{
             neighbours.Add(new Vector3Int(coords.x - 1, coords.y));
-        }
-        if (coords.x < initData.islandSize)
+        //}
+        //if (coords.x < initData.islandSize)
         {
             neighbours.Add(new Vector3Int(coords.x + 1, coords.y));
         }
@@ -127,19 +138,19 @@ public class PathFinder : MonoBehaviour
         {
             coords.x--;
         }
-        if (coords.y > 0 && coords.x > 0)
+        //if (coords.y > 0 && coords.x > 0)
         {
             neighbours.Add(new Vector3Int(coords.x, coords.y + 1));
         }
-        if (coords.y > 0 && coords.x < initData.islandSize)
+        //if (coords.y > 0 && coords.x < initData.islandSize)
         {
             neighbours.Add(new Vector3Int(coords.x+1, coords.y + 1));
         }
-        if (coords.y < initData.islandSize && coords.x > 0)
+        //if (coords.y < initData.islandSize && coords.x > 0)
         {
             neighbours.Add(new Vector3Int(coords.x, coords.y - 1));
         }
-        if (coords.y < initData.islandSize && coords.x < initData.islandSize)
+        //if (coords.y < initData.islandSize && coords.x < initData.islandSize)
         {
             neighbours.Add(new Vector3Int(coords.x + 1, coords.y - 1));
         }

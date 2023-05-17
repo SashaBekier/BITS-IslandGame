@@ -31,8 +31,13 @@ public class PlayerMouseMovement : MonoBehaviour
 
     
     public Collider2D playerCollider;
-   
-
+    
+    public void ClearCheckpoints()
+    {
+        targetLocation = transform.position;
+        checkpoints.Clear();
+    }
+    
     private void Awake()
     {
         mouseInput = new MouseInput();
@@ -140,13 +145,14 @@ public class PlayerMouseMovement : MonoBehaviour
             Vector3Int playerCell = ground.WorldToCell(transform.position);
             Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
             checkpoints.Clear();
-
-            while (pathFound.Count > 0)
+            int noInfiniteLoop = 0;
+            while (pathFound.Count > 0 && noInfiniteLoop < 50)
             {
                 Vector3Int nextCoords = pathFound.Dequeue();
                 //Debug.Log("Queuing: (" + nextCoords.x + "," + nextCoords.y + ")");
                 //checkpoints.Enqueue(offsetPositionWithinCell(nextCoords,shim.y));
                 checkpoints.Enqueue(impassable.CellToWorld(nextCoords));
+                noInfiniteLoop++;
             }
         }
     }
