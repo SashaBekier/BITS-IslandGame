@@ -52,6 +52,8 @@ public class initialiseMap : MonoBehaviour
 
     public Enemy[] enemies;
 
+    private float islandSizeModifier;
+
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +70,10 @@ public class initialiseMap : MonoBehaviour
         groundTiles[1] = groundTile2;
         groundTiles[2] = groundTile3;
 */
+        islandSizeModifier = islandSize / 50;
+         maxOceanWidth *= (int)islandSizeModifier;
+        islandSizeModifier *= islandSizeModifier;
+            
         initialiseAvailableTiles();
 
         
@@ -107,7 +113,7 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnRocks()
     {
-        for (int i = 0; i < 250; i++)
+        for (int i = 0; i < ((int)250*islandSizeModifier); i++)
         {
             //UnityEngine.Debug.Log("Spawning Rocks");
             Vector3Int gridPosition1 = getTargetTile();
@@ -161,7 +167,7 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnEdibles()
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < ((int)20* islandSizeModifier); i++)
         {
             UnityEngine.Debug.Log("Spawning Edibles");
             Vector3Int gridPosition1 = getTargetTile();
@@ -213,7 +219,7 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnPlants()
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < ((int)30 * islandSizeModifier); i++)
         {
             //UnityEngine.Debug.Log("Spawning Plants");
             Vector3Int gridPosition1 = getTargetTile();

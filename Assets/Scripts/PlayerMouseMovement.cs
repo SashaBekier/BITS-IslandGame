@@ -143,7 +143,7 @@ public class PlayerMouseMovement : MonoBehaviour
         if (ground.HasTile(gridPosition) && !impassable.HasTile(gridPosition))
         {
             Vector3Int playerCell = ground.WorldToCell(transform.position);
-            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition);
+            Queue<Vector3Int> pathFound = PathFinder.instance.FindPath(playerCell, gridPosition, true);
             checkpoints.Clear();
             int noInfiniteLoop = 0;
             while (pathFound.Count > 0 && noInfiniteLoop < 50)
