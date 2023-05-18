@@ -33,10 +33,15 @@ public class MagicBar : MonoBehaviour
             maxMagic = warrior.MagicTotal;
             isRefreshNeeded = true;
         }
-        if (System.Math.Abs(lastKnownMagic - warrior.currentMagic) > 0.1)
+        if (System.Math.Abs(lastKnownMagic - warrior.currentMagic) > 0.5)
         {
 
             isRefreshNeeded = true;
+        }
+        if(lastKnownMagic > maxMagic)
+        {
+            maxMagic = warrior.MagicTotal;
+            lastKnownMagic = Mathf.Min(maxMagic, lastKnownMagic);
         }
 
         if (isRefreshNeeded)
