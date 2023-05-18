@@ -37,9 +37,18 @@ public class Fightable : MonoBehaviour, IPointerClickHandler
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Collision with enemy");
-            if (battleManager != null)
+
+            // Check if BattleManager.Instance exists
+            if (BattleManager.Instance != null)
             {
-                battleManager.InitiateBattle(enemy); // Pass the current enemy to the BattleManager
+                Debug.Log("BattleManager.Instance exists"); // Add this debug log
+
+                // Call the InitiateBattle method of the BattleManager
+                BattleManager.Instance.InitiateBattle(this.GetComponent<Fightable>());
+            }
+            else
+            {
+                Debug.Log("BattleManager.Instance is null");
             }
         }
     }
