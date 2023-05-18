@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEditor.Progress;
 
-public class Fightable : MonoBehaviour
+public class Fightable : MonoBehaviour, IPointerClickHandler
 {
     // Start is called before the first frame update
 
@@ -47,5 +47,15 @@ public class Fightable : MonoBehaviour
     public virtual void RightClick()
     {
         Debug.Log("Calling Enemy Right Click");
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            Debug.Log("Left click caught");
+            PlayerMouseMovement player = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>();
+            player.enqueuePathToMousePosition(false);
+        }
     }
 }
