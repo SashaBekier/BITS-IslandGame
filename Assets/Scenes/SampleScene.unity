@@ -4231,7 +4231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1066576948}
   enemyPrefab: {fileID: 8445997501764111709, guid: b7d43bb0cd9225f4fb087304c7e47615, type: 3}
-  islandSize: 50
+  islandSize: 100
   fogTilemap: {fileID: 1179399956}
   impassableTilemap: {fileID: 189811098}
   terrainTilemap: {fileID: 1307978642}

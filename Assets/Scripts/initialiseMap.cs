@@ -564,7 +564,11 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < 5 * islandSizeModifier; i++)
         {
-            Vector3Int gridPosition = getTargetTile();
+            Vector3Int gridPosition;
+            do
+            {
+                gridPosition = getTargetTile();
+            } while (Vector3.Distance(terrainTilemap.CellToWorld(gridPosition), player.transform.position) < 5);
             Vector3 enemyPosition = terrainTilemap.CellToWorld(gridPosition);
 
             Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
