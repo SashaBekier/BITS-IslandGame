@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using UnityEngine.UI;
 public class deFog : MonoBehaviour
 {
     public Tilemap fogTilemap;
     private int vision = 3;
+    public Image clock;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,13 @@ public class deFog : MonoBehaviour
     private void UpdateFog()
     {
         Vector3Int currentPlayerPosition = fogTilemap.WorldToCell(transform.position);
+        if(vision == 3 && clock.transform.eulerAngles.z > 180)
+        {
+            vision -= 1;
+        } else if(vision == 2 && clock.transform.eulerAngles.z > 0)
+        {
+            vision += 1;
+        }
 
         for (int i = -vision; i <= vision; i++)
         {
