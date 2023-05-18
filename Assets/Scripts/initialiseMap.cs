@@ -34,10 +34,10 @@ public class initialiseMap : MonoBehaviour
     public Tile collisionTile;
 
 
-    public Tile[] puzzleTiles;
+   
     public Tile[] groundTiles;
 
-    private int puzzleReference = 0;
+    
     private int maxOceanWidth = 15;
     public WorldScenery sceneryPrefab;
     public Pickupable worldItemPrefab;
@@ -47,10 +47,11 @@ public class initialiseMap : MonoBehaviour
 
     public Scenery[] plants;
     public Scenery altar;
-    public Scenery[] puzzleReceivers;
+    
     public Scenery[] rocks;
 
     public Enemy[] enemies;
+    private Dictionary<Vector3Int, int> steps = new Dictionary<Vector3Int, int>();
 
     private float islandSizeModifier;
 
@@ -58,56 +59,49 @@ public class initialiseMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Start worldSpawn");
         finder = PathFinder.instance;
         //UnityEngine.Random.InitState(16726);
 
-        //initialise tile randomisation arrays
-        /*
-        puzzleTiles[0] = puzzleTile1;
-        puzzleTiles[1] = puzzleTile2;
-        puzzleTiles[2] = puzzleTile3;
-        groundTiles[0] = groundTile1;
-        groundTiles[1] = groundTile2;
-        groundTiles[2] = groundTile3;
-*/
+
         islandSizeModifier = islandSize / 50;
          maxOceanWidth *= (int)islandSizeModifier;
         islandSizeModifier *= islandSizeModifier;
             
         initialiseAvailableTiles();
-
-        
-
-        PlaceFixedGroupTiles();
-        PlaceFixedGroupTiles();
-        PlaceFixedGroupTiles();
         CreateIsland();
-
         FixSingleTileIslands();
         SetOceanTones();
-        
-        
-
         SpawnEdibles();
         SpawnPlants();
-
         SpawnRocks();
+        buildStepMap();
         PlacePlayer();
+        
         SpawnEnemies();
         SpawnPuzzlePieces();
         SpawnAltars();
 
-       
+        Debug.Log("End worldSpawn");
     }
-
+     private void buildStepMap()
+    {
+        //Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position);
+        Debug.Log("About to generate steps in initMap");
+        steps = finder.GenerateStepCount(new Vector3Int(islandSize / 2, islandSize / 2));
+        Debug.Log("Just generated steps in initMap");
+    }
     private void PlacePlayer()
     {
         Vector3Int gridPosition1;
+        int infiniteLoopBreaker = 0;
         do {
             gridPosition1 = getTargetTile();
             Vector3 worldPos = terrainTilemap.CellToWorld(gridPosition1);
             player.transform.position = worldPos;
-        } while (!accessibleToPlayer(new Vector3Int(islandSize / 2, islandSize / 2)));
+            infiniteLoopBreaker++;
+        } while (!accessibleToPlayer(gridPosition1) && infiniteLoopBreaker < 50);
+        if(infiniteLoopBreaker == 50) { Debug.Log("Broke at PlacePlayer"); }
         setCoordsUnavailable(gridPosition1);
     }
 
@@ -169,7 +163,7 @@ public class initialiseMap : MonoBehaviour
     {
         for (int i = 0; i < ((int)20* islandSizeModifier); i++)
         {
-            UnityEngine.Debug.Log("Spawning Edibles");
+            //UnityEngine.Debug.Log("Spawning Edibles");
             Vector3Int gridPosition1 = getTargetTile();
             Vector3 appleposition = terrainTilemap.CellToWorld(gridPosition1);
 
@@ -195,12 +189,13 @@ public class initialiseMap : MonoBehaviour
         {
             Vector3Int gridPosition1;
             
-            UnityEngine.Debug.Log("Spawning Books");
-            
+            //UnityEngine.Debug.Log("Spawning Books");
+            int infiniteLoopBreaker = 0;
             do {
                 gridPosition1 = getTargetTile();
-                
-            } while (!accessibleToPlayer(gridPosition1));
+                infiniteLoopBreaker++;
+            } while (!accessibleToPlayer(gridPosition1)&&infiniteLoopBreaker<50);
+            if (infiniteLoopBreaker == 50) { Debug.Log("Broke at Spawn Puzzle Pieces"); }
             Vector3 bookposition = terrainTilemap.CellToWorld(gridPosition1);
             Pickupable newItem = Instantiate(worldItemPrefab, bookposition, Quaternion.identity);
             Pickupable worldItem = newItem.GetComponent<Pickupable>();
@@ -212,8 +207,6 @@ public class initialiseMap : MonoBehaviour
 
     private bool accessibleToPlayer(Vector3Int coords)
     {
-        Vector3Int playerPosition = terrainTilemap.WorldToCell(player.transform.position);
-        Dictionary<Vector3Int, int>  steps = finder.GenerateStepCount(playerPosition);
         return steps.ContainsKey(coords);
     }
 
@@ -228,11 +221,14 @@ public class initialiseMap : MonoBehaviour
             for (int j = 0; j < plantDensity; j++)
             {
                 bool getNeighbour = false;
+                int infiniteLoopBreaker = 0;
                 do
                 {
                     SpawnPlant(gridPosition1, plantIndex, getNeighbour);
                     getNeighbour = true;
-                } while (UnityEngine.Random.Range(0f, 1f) < plants[plantIndex].isClumping);
+                    infiniteLoopBreaker++;
+                } while (UnityEngine.Random.Range(0f, 1f) < plants[plantIndex].isClumping && infiniteLoopBreaker <50);
+                if(infiniteLoopBreaker == 50) { Debug.Log("Broke at SpawnPlants"); }
             }
 
         }
@@ -241,41 +237,48 @@ public class initialiseMap : MonoBehaviour
     private void SpawnAltars()
     {
         Vector3Int[] gridPositions = new Vector3Int[4];
-            UnityEngine.Debug.Log("Spawning Altars");
-            bool siteSuitable = true;
-            do
+        //Debug.Log("Spawning Altars");
+        bool siteSuitable = true;
+        int infiniteLoopBreaker = 0;
+        do
+        {
+            siteSuitable = true;
+            gridPositions[0] = getTargetTile();
+            gridPositions[1] = gridPositions[0] - new Vector3Int(0, 2, 0);
+            gridPositions[2] = gridPositions[0] - new Vector3Int(2, 1, 0);
+            gridPositions[3] = gridPositions[0] - new Vector3Int(1, 1, 0);
+            if(gridPositions[0].y % 2 == 1)
             {
-                siteSuitable = true;
-                gridPositions[0] = getTargetTile();
-                gridPositions[1] = gridPositions[0] - new Vector3Int(0, 2, 0);
-                gridPositions[2] = gridPositions[0] - new Vector3Int(2, 1, 0);
-                gridPositions[3] = gridPositions[0] - new Vector3Int(1, 1, 0);
-                if(gridPositions[0].y % 2 == 1)
+                gridPositions[2].x += 1;
+                gridPositions[3].x += 1;
+            }
+            impassableTilemap.SetTile(gridPositions[0], collisionTile);
+            impassableTilemap.SetTile(gridPositions[1], collisionTile);
+            impassableTilemap.SetTile(gridPositions[2], collisionTile);
+            foreach (Vector3Int gridPosition in gridPositions)
+            {
+                if (!coordsAreAvailable(gridPosition))
                 {
-                    gridPositions[2].x += 1;
-                    gridPositions[3].x += 1;
+                    siteSuitable = false;
                 }
-                impassableTilemap.SetTile(gridPositions[0], collisionTile);
-                impassableTilemap.SetTile(gridPositions[1], collisionTile);
-                impassableTilemap.SetTile(gridPositions[2], collisionTile);
-                foreach (Vector3Int gridPosition in gridPositions)
-                {
-                    if (!accessibleToPlayer(gridPositions[3]) || !coordsAreAvailable(gridPosition))
-                    {
-                        siteSuitable = false;
-                    }
-                }
+            }
+            if (!accessibleToPlayer(gridPositions[3]))
+            {
+                siteSuitable = false;
+            }
             if (!siteSuitable)
             {
                 impassableTilemap.SetTile(gridPositions[0], null);
                 impassableTilemap.SetTile(gridPositions[1], null);
                 impassableTilemap.SetTile(gridPositions[2], null);
             }
-        } while (!siteSuitable);
-            SpawnAltar(gridPositions[0],0);
-            SpawnAltar(gridPositions[1],1);
-            SpawnAltar(gridPositions[2],2);
-            PuzzleManager.instance.portalLocation = gridPositions[3];
+            infiniteLoopBreaker++;
+        } while (!siteSuitable && infiniteLoopBreaker < 50);
+        if(infiniteLoopBreaker == 50) { Debug.Log("Broke in Spawn Altars"); }
+        SpawnAltar(gridPositions[0],0);
+        SpawnAltar(gridPositions[1],1);
+        SpawnAltar(gridPositions[2],2);
+        PuzzleManager.instance.portalLocation = gridPositions[3];
         
     }
 
@@ -346,7 +349,7 @@ public class initialiseMap : MonoBehaviour
 
     void FixSingleTileIslands()
     {
-        Dictionary<Vector3Int, int> steps = finder.GenerateStepCount(new Vector3Int(islandSize / 2, islandSize / 2));
+        Dictionary<Vector3Int, int> stepsToCentre = finder.GenerateStepCount(new Vector3Int(islandSize / 2, islandSize / 2));
         for (int xcoord = 0; xcoord <= islandSize; xcoord++)
         {
             for (int ycoord = 0; ycoord <= islandSize; ycoord++)
@@ -356,7 +359,7 @@ public class initialiseMap : MonoBehaviour
                 if (!terrainTilemap.GetTile(coords).ToString().Equals("ocean_tile"))
                 {
                     
-                    if (!steps.ContainsKey(coords))
+                    if (!stepsToCentre.ContainsKey(coords))
                     {
                                                 
                             setOceanTile(coords);
@@ -533,36 +536,7 @@ public class initialiseMap : MonoBehaviour
         terrainTilemap.SetTile(tileCoords, groundTiles[UnityEngine.Random.Range(0, groundTiles.Length)]);
     }
 
-    void PlaceFixedGroupTiles()
-    {
-        int xOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize-maxOceanWidth);
-        int yOffset = UnityEngine.Random.Range(maxOceanWidth, islandSize - maxOceanWidth);
 
-
-        if (yOffset % 2 != 0)
-        {
-            yOffset++;
-        }
-        Vector3Int gridPosition1 = new Vector3Int(xOffset, yOffset, 0);
-        Vector3Int gridPosition2 = new Vector3Int(xOffset + 1, yOffset, 0);
-        Vector3Int gridPosition3 = new Vector3Int(xOffset, yOffset + 1, 0);
-
-
-        if (!terrainTilemap.HasTile(gridPosition1) && !terrainTilemap.HasTile(gridPosition2) && !terrainTilemap.HasTile(gridPosition3))
-        {
-            terrainTilemap.SetTile(gridPosition1, puzzleTiles[puzzleReference]);
-            terrainTilemap.SetTile(gridPosition2, puzzleTiles[puzzleReference]);
-            terrainTilemap.SetTile(gridPosition3, puzzleTiles[puzzleReference]);
-            puzzleReference++;
-
-        }
-        else
-        {
-            PlaceFixedGroupTiles();
-        }
-
-
-    }
 
     /*private void SpawnEnemies()
     {
@@ -588,14 +562,14 @@ public class initialiseMap : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5 * islandSizeModifier; i++)
         {
             Vector3Int gridPosition = getTargetTile();
             Vector3 enemyPosition = terrainTilemap.CellToWorld(gridPosition);
 
             Fightable newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
             Fightable enemyPlacement = newEnemy.GetComponent<Fightable>();
-            enemyPlacement.Initialise(enemies[i]);
+            enemyPlacement.Initialise(enemies[UnityEngine.Random.Range(0, enemies.Length)]);
 
             // Offset the enemy sprite position
             Vector3 spriteOffset = new Vector3(0, 0f, 0); // Adjust the Y offset as needed
