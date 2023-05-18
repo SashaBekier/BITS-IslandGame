@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEditor.Progress;
 
-public class Fightable : MonoBehaviour, IPointerClickHandler
+public class Fightable : MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -24,18 +24,28 @@ public class Fightable : MonoBehaviour, IPointerClickHandler
         spriteRenderer.sprite = enemy.sprite;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    private BattleManager battleManager;
+
+    // Method to set the BattleManager reference
+    public void SetBattleManager(BattleManager manager)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        battleManager = manager;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
         {
-            Debug.Log("Right Click enemy");
-            enemy.RightClick();
+            Debug.Log("Collision with enemy");
+            if (battleManager != null)
+            {
+                battleManager.InitiateBattle(enemy); // Pass the current enemy to the BattleManager
+            }
         }
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            Debug.Log("Left click enemy");
-            PlayerMouseMovement player = GameObject.Find("Warrior").GetComponent<PlayerMouseMovement>();
-            player.enqueuePathToMousePosition(false);
-        }
+    }
+
+    public virtual void RightClick()
+    {
+        Debug.Log("Calling Enemy Right Click");
     }
 }
