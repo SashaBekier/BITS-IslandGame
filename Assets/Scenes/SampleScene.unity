@@ -4695,7 +4695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fogTilemap: {fileID: 1179399956}
-  clock: {fileID: 1401508718}
+  nightOverlay: {fileID: 331446770}
 --- !u!95 &1066576956
 Animator:
   serializedVersion: 5

@@ -7,33 +7,42 @@ public class deFog : MonoBehaviour
 {
     public Tilemap fogTilemap;
     private int vision = 3;
-    public Image clock;
+    public Image nightOverlay;
+    private Vector3Int lastGridCell;
     // Start is called before the first frame update
     void Start()
     {
+        lastGridCell = fogTilemap.WorldToCell(transform.position);
         UpdateFog();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateFog();
+        if (!lastGridCell.Equals(fogTilemap.WorldToCell(transform.position)))
+        {
+            lastGridCell = fogTilemap.WorldToCell(transform.position);
+            UpdateFog();
+        }
+       
     }
 
     private void UpdateFog()
     {
+        int localVision = vision;
         Vector3Int currentPlayerPosition = fogTilemap.WorldToCell(transform.position);
-        if(vision == 3 && clock.transform.eulerAngles.z > 180)
+        //Debug.Log(nightOverlay.color.a);
+        if (nightOverlay.color.a > 0.2f)
         {
-            vision -= 1;
-        } else if(vision == 2 && clock.transform.eulerAngles.z > 0)
+            localVision = vision - 1;
+        } else
         {
-            vision += 1;
+            localVision = vision;
         }
 
-        for (int i = -vision; i <= vision; i++)
+        for (int i = -localVision; i <= localVision; i++)
         {
-            for (int j = -vision; j <= vision; j++)
+            for (int j = -localVision; j <= localVision; j++)
             {
                 Vector3Int testingTile = currentPlayerPosition + new Vector3Int(i, j, 0);
                 if (fogTilemap.HasTile(testingTile)) {
