@@ -33,11 +33,15 @@ public class HealthBar : MonoBehaviour
             maxHealth = warrior.HealthTotal;
             isRefreshNeeded = true;
         }
-        if (System.Math.Abs(lastKnownHealth-warrior.currentHealth)>0.01) {
+        if (System.Math.Abs(lastKnownHealth-warrior.currentHealth)>0.5) {
             
             isRefreshNeeded = true;
         }
-        
+        if(lastKnownHealth > maxHealth)
+        {
+            maxHealth = warrior.HealthTotal;
+            lastKnownHealth = Mathf.Min(maxHealth, lastKnownHealth);
+        }
         if (isRefreshNeeded)
         {
             UpdateHealthBar();
