@@ -15,7 +15,7 @@ public class PlayerMouseMovement : MonoBehaviour
     public Tilemap impassable;
     private Vector3 targetLocation;
     private Queue<Vector3> checkpoints = new Queue<Vector3>();
-    private float moveSpeed = 2.5f;
+    private float moveSpeed = 2.25f;
     private bool isPointerOverGameObject = true;
     
     public bool setHeroType = false;
@@ -67,7 +67,8 @@ public class PlayerMouseMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(catchingMoveData)
+        float realMoveSpeed = moveSpeed + 0.05f * GameObject.Find("Warrior").GetComponent<PlayerStats>().SpeedTotal;
+        if (catchingMoveData)
         {
             if (mouseInput.Mouse.MouseClick.IsPressed())
             {

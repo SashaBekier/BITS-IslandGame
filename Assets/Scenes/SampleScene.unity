@@ -4244,7 +4244,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b2495d34db9168d4c9f13f26bf112aca, type: 2}
   sceneryPrefab: {fileID: 578337422275027265, guid: 792ecf7f2e0ca1449b2b847492bb8455, type: 3}
   worldItemPrefab: {fileID: 6301621456707519060, guid: bf07673bf98b0ee42aa255a200e92121, type: 3}
-  items: []
+  items:
+  - {fileID: 11400000, guid: 8cd318dba46199049aa72ca5c92b368a, type: 2}
   edibles:
   - {fileID: 11400000, guid: 3d67b112506b86b4a93966a1520f1fd3, type: 2}
   - {fileID: 11400000, guid: 11634e3c062b03e4db033887fa0f0bf4, type: 2}
@@ -6928,7 +6929,8 @@ MonoBehaviour:
   - {fileID: 1313660086}
   - {fileID: 461202120}
   inventoryItemPrefab: {fileID: 6992751230938003758, guid: 18a58e1d3e74c214eb92f327f3c46022, type: 3}
-  startItems: []
+  startItems:
+  - {fileID: 11400000, guid: 8cd318dba46199049aa72ca5c92b368a, type: 2}
   equipItemPrefab: {fileID: 3043241593263852512, guid: 22af40cfff1a54f4ba9f089956e3bfc1, type: 3}
 --- !u!4 &1737545134
 Transform:

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+    public static PlayerStats instance;
     public int Strength;
     public int Intelligence;
     public int Dexterity;
@@ -11,9 +12,23 @@ public class PlayerStats : MonoBehaviour
     public int currentXP;
     public int nextLevelXP;
     public int lastLevelXP;
-
-
-
+    
+    public enum Modifiable
+    {
+        Strength,
+        Intelligence, 
+        Dexterity,
+        Health,
+        Magic, 
+        Ranged,
+        Speed,
+        Attack,
+        Defence
+    }
+    private void Awake()
+    {
+        instance = this;
+    }
 
     [HideInInspector]
     public List<Modifier> modifiers = new List<Modifier>();
@@ -30,7 +45,7 @@ public class PlayerStats : MonoBehaviour
 
     }
 
-    private int FetchModifiers(string modifierType)
+    private int FetchModifiers(Modifiable modifierType)
     {
         int totalModifier = 0;
 
@@ -113,7 +128,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Health");
+            total += FetchModifiers(Modifiable.Health);
             total += Strength * 2;
             return total;
         }
@@ -124,7 +139,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Strength");
+            total += FetchModifiers(Modifiable.Strength);
             total += Strength;
             return total;
         }
@@ -134,7 +149,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Intelligence");
+            total += FetchModifiers(Modifiable.Intelligence);
             total += Intelligence;
             return total;
         }
@@ -144,7 +159,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Dexterity");
+            total += FetchModifiers(Modifiable.Dexterity);
             total += Dexterity;
             return total;
         }
@@ -154,8 +169,18 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Attack");
-            total += Strength * 2;
+            total += FetchModifiers(Modifiable.Attack);
+            total += StrengthTotal * 2;
+            return total;
+        }
+    }
+    public int DefenceTotal
+    {
+        get
+        {
+            int total = 0;
+            total += FetchModifiers(Modifiable.Defence);
+            total += DexterityTotal * 2;
             return total;
         }
     }
@@ -164,7 +189,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Mp");
+            total += FetchModifiers(Modifiable.Magic);
             total += Intelligence * 2;
             return total;
         }
@@ -174,8 +199,8 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Magic");
-            total += Intelligence * 2;
+            total += FetchModifiers(Modifiable.Magic);
+            total += IntelligenceTotal * 2;
             return total;
         }
     }
@@ -184,8 +209,8 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Ranged");
-            total += Dexterity * 2;
+            total += FetchModifiers(Modifiable.Ranged);
+            total += DexterityTotal * 2;
             return total;
         }
     }
@@ -194,7 +219,7 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Movement");
+            total += FetchModifiers(Modifiable.Speed);
             total += Dexterity * 2;
             return total;
         }
@@ -204,8 +229,8 @@ public class PlayerStats : MonoBehaviour
         get
         {
             int total = 0;
-            total += FetchModifiers("Speed");
-            total += Dexterity * 2;
+            total += FetchModifiers(Modifiable.Speed);
+            total += DexterityTotal * 2;
             return total;
         }
     }
@@ -267,7 +292,7 @@ public class PlayerStats : MonoBehaviour
         }
         lastLevelXP = nextLevelXP - 900 - (100 * Level);
         Modifier myModifier = (Modifier)ScriptableObject.CreateInstance("Modifier");
-        myModifier.initialise("Strength", 20);
+        myModifier.initialise(Modifiable.Strength, 20);
         modifiers.Add(myModifier);
         Debug.Log("Total Attack: " + AttackTotal);
     }

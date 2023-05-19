@@ -6,15 +6,15 @@ public class Modifier : ScriptableObject
 {
     
         public int magnitude;
-        public string modType;
+        public PlayerStats.Modifiable modType;
 
-        public void initialise(string modType, int magnitude)
+        public void initialise(PlayerStats.Modifiable modType, int magnitude)
         {
             this.modType = modType;
             this.magnitude = magnitude;
         }
 
-    public Modifier newModifier(string modType, int magnitude)
+    public static Modifier newModifier(PlayerStats.Modifiable modType, int magnitude)
     {
         Modifier myModifier = (Modifier)ScriptableObject.CreateInstance("Modifier");
         myModifier.initialise(modType, magnitude);

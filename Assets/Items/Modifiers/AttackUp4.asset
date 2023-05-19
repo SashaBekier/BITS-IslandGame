@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AttackUp4
   m_EditorClassIdentifier: 
   magnitude: 4
-  modType: Attack
+  modType: 7
