@@ -583,4 +583,13 @@ public class initialiseMap : MonoBehaviour
         }
     }
 
+    private void LoadPlayerPosition()
+    {
+        float playerPositionX = PlayerPrefs.GetFloat("PlayerPositionX");
+        float playerPositionY = PlayerPrefs.GetFloat("PlayerPositionY");
+        float playerPositionZ = PlayerPrefs.GetFloat("PlayerPositionZ");
+
+        Vector3 playerPosition = new Vector3(playerPositionX, playerPositionY, playerPositionZ);
+        player.transform.position = playerPosition;
+    }
 }
