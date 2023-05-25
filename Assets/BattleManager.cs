@@ -5,6 +5,8 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance { get; private set; }
 
+    public GameObject player;
+
     private void Awake()
     {
         if (Instance == null)
@@ -21,7 +23,18 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Battle initiated with enemy: " + fightable.enemy.enemyName);
 
-        SceneManager.LoadScene("BattleScene");
+        // Save player's position
+        SavePlayerPosition();
+
+        SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
     }
 
+    private void SavePlayerPosition()
+    {
+        if (player != null)
+        {
+            Vector3 playerPosition = player.transform.position;
+            // Save the player position to your save data or perform any other necessary actions
+        }
+    }
 }
